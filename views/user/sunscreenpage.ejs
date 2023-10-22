@@ -1,0 +1,25 @@
+<%- include("./head.ejs") -%>
+
+<%- include("./header.ejs") -%>
+
+<div class="row">
+    <% products.forEach((product)=>{ %>
+        <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="product__item">
+                <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
+                    <ul class="product__hover">
+                        <li><a href="/singleProductpage?id=<%=product.id %>"><img class="img-fluid" src="/images/<%= product.image[0]?.filename %>" alt="image"></a></li>
+                    </ul>
+                </div>
+                <div class="product__item__text">
+                    <h6><%= product.productname %></h6>
+                    <a href="#" class="add-cart">+ Add To Cart</a>
+                    <h5 class="my-2">₹<%= product.sellingPrice %></h5>
+                </div>
+            </div>
+        </div>
+ <% }) %>
+</div>
+
+
+<%- include("./footer.ejs") -%>

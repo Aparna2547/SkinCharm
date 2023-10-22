@@ -1,0 +1,19 @@
+<%- include("../user/head.ejs") %>
+        <section class="d-flex justify-content-center align-items-center main-div">
+            <div class="p-3 rounded-1 frm-div" >
+                <form action="/verifyOtp" class="d-flex flex-column frm-form" method="post">
+                    <h3 class="pt-2 fs-bold text-center">OTP Validation</h3>
+
+                    <br>
+                    <label for="">Enter the otp</label>
+                    <input type="text" class="border rounded border-dark" name="otp">
+                    <h6 class="text-danger"><%=locals.context?context:""; %></h6>
+                    <!-- <div class="countdown text-danger" id="countdown">30</div>
+                    <a class="btn btn-primary mt-4 w-100 fw-bold" id="resendButton" href="/resendOtp" hidden>Resend OTP</a> -->
+                    <button class="btn btn-primary mt-4 w-100 fw-bold" style="background-color:#dd7973;" id="otpVerifyButton">Confirm OTP</button>
+                </form>
+            </div>
+        </section>
+
+
+        <%- include("../user/footer.ejs") %>

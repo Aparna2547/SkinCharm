@@ -1,0 +1,25 @@
+<%- include("../user/head.ejs") %>
+    <%- include("../user/header.ejs") %>
+        <section class="d-flex justify-content-center align-items-center main-div" style="min-height: 89.2vh;">
+            <div class="p-3 rounded-1 frm-div" >
+                <form action="/login" class="d-flex flex-column frm-form" method="post" id="loginValidate">
+                   
+                    <h6 class="text-center fw-bold text-danger">
+                        <%=locals.context?context:""; %>
+                    </h6>
+
+
+                    <h2 class="pt-2 fw-bold text-center">LOG IN</h2>
+                    <input type="text" placeholder="Mobile Number" name="mobile" id="mobile" class="border rounded border-dark py-2 mt-3">
+                    <input type="password" placeholder="password" name="password" id="password" class="border rounded border-dark py-2 mt-3">
+                    <div id="errorMessage" class="d-flex justify-content-center text-danger fw-bold m-2"></div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <button class="mt-4 btn fw-bold text-white" style="background-color:#dd7973;">LOG IN</button>
+                    </div>
+                    </form>
+                <div class="d-flex justify-content-center mt-0 fs-7">Don't have an account &nbsp;<a href="/register" class="text-danger fw-bold">Signup</a></div>
+            </div>
+        </section>
+
+        <script src="/user/js/loginValidation.js"></script>
+     

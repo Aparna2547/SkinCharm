@@ -1,0 +1,138 @@
+<%- include('./head.ejs') %>
+<%- include('./header.ejs') %>
+
+
+<!-- if cart is empty -->
+<% if(!cartData || cartData?.product?.length == 0){ %>
+
+    <div style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div style="width: 20rem" class="mt-0">
+          <img src="/user/assets/emptyBag.webp" alt="empty wishlist" class="img-fluid">
+        </div>
+        <div class="text-center">
+            <h4>OOOPS!!!!!!! your cart is empty</h4>
+            <a href="/shop" class="btn w-100 text-white fw-bold" style="background-color:  RGB(75, 0, 130);">GO TO SHOP</a>
+        </div>
+    </div>
+      
+
+
+<% }else{ %>
+   
+    <!-- Shopping Cart Section Begin -->
+    <section class="shopping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="shopping__cart__table">
+                        <table class="text-center">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Total Price</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(cartData && cartData.product && cartData.product.length){ %>
+                                    <% cartData.product.forEach((data)=>{ %>
+                                <tr>
+                                    <td class="product__cart__item">
+                                        <a href="/singleProductpage?id=<%=data.product_id._id%>"> 
+                                        <div class="product__cart__item__pic" style="width: 4rem;">
+                                         <img src="/images/<%=data.product_id.image[0].filename %>" class="img-fluid" alt="">
+
+                                        </div></a>
+                                        <div class="product__cart__item__text">
+                                            <h6><%=data.product_id.productname%></h6>
+                                            <h5>₹<%=data.price%></h5>
+                                        </div>
+                                    </td>
+                                    <td class="quantity__item">
+                                        <div class="quantity d-flex justify-content-center align align-items-center">
+                                            <button class="btn btn-primary btn-sm p-0 countButton" data-item-id="<%=data.product_id._id %>" data-to-do="minus" style="width:1.5rem">-</button>
+                                                <h5 class="mx-1 countOnScreen" id="product-<%=data.product_id._id%>" ><%=data.count%></h5>
+                                            <button class="btn btn-primary btn-sm p-0 countButton" data-item-id="<%=data.product_id._id %>" data-to-do="plus" style="width: 1.5rem;">+</button>
+                                        </div>
+                                        <div>
+                                            <p id="warning-<%= data.product_id._id %>"></p>
+                                        </div>
+                                    </td>
+                                    <td class="cart__price" id="totalPrice-<%= data.product_id._id %>">₹<%=data.count * data.price%></td>
+                                    <!-- <td class="cart__close" ><a href="/cartDelete?productId=<%=data.product_id._id %> "onclick="return alertMessage();"><i class="fa fa-trash-o" style="font-size:24px"></i></a></td> -->
+                                    <td class="cart__close"> <a 
+                                        href="/cartDelete?productId=<%=data.product_id._id %> " data-toggle="modal"
+                                        data-target="#confirmationModal">
+                                        <i class="fa fa-trash-o" style="font-size:24px"></i> </a></td>
+                                <!-- Modal -->
+                                <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="confirmationModalLabel">Confirmation
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- Add confirmation message or content here -->
+                                                Are you sure you want to delete from cart?
+                                                    
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <!-- Add your action button (Block/Unblock) here -->
+                                                <a class="btn"
+                                                    href="/cartDelete?productId=<%=data.product_id._id %> ">
+                                                   Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                </tr>
+                                <%}) } %>
+                             </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn">
+                                <a href="/shop" class="text-decoration-none">Continue Shopping</a>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="cart__discount">
+                        <h6>Discount codes</h6>
+                        <form action="#">
+                            <input type="text" placeholder="Coupon code">
+                            <button type="submit" style="background-color: #E80071;">Apply</button>
+                        </form>
+                    </div>
+                    <div class="cart__total">
+                        <h6>Cart total</h6>
+                        <ul>
+                            <!-- <li>Subtotal <span>$ 169.50</span></li> -->
+                            <li class="fw-bold">Total <span id="total">₹ <%=total%></span></li>
+                        </ul>
+                        <a href="/shippingAddress" class="primary-btn text-decoration-none text-white" style="background-color: #E80071;">Proceed to checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <% } %>
+    <!-- Shopping Cart Section End -->
+
+   
+    <%- include('./footer.ejs') %>

@@ -1,0 +1,98 @@
+<%- include("./head.ejs") -%>
+<%- include("./header.ejs") -%>
+
+<section>
+<%-  include("./profilebar.ejs")-%>
+<h5 class="card-title fw-bold mb-5">ORDERS</h5>
+
+<% if(orderData && orderData.length) {%>
+    <% orderData.forEach((order)=>{ %>
+            <div class="card mt-2">
+                <div class="card-body d-flex">
+                   
+                    <div class="product__cart__item__pic" style="width: 6rem;">
+                        <!-- <a href="/admin/viewDetails?id=<%order._id%>"> -->
+                        <img src="/images/<%=order.product_id.image[0].filename %>" class="img-fluid" alt="">
+                       </div>
+                    <!-- </a> -->
+                       <div class="d-block mx-5">
+                    <p class="card-text"><b><%= order.product_id.productname %></b> </p>
+                    <p class="card-text"><b><%= order.product_id.category %></b> </p>
+                    <p class="card-text"><b>Quantity:  <%= order.count %></b> </p>
+                    <p class="card-text">  <b>₹  <%= order.price %></b> </p>
+                    <%const date = new Date(order.orderDate);%>
+                    <%const options = { month: 'short', day: 'numeric', year: 'numeric' };
+                    const formattedDate = date.toLocaleDateString('en-US', options); %>
+                    <% 
+                    var status
+                        switch (order.orderStatus) {
+                            case 1:
+                                status = "Confirmed"
+                                break;
+                            case 2:
+                                status = "Shipped"
+                                break;
+                            case 3:
+                                status = "Out for delivery"
+                                break
+                            case 4:
+                                status = "Delivered"
+                                break;
+                            case 5:
+                                status = "Cancelled"
+                                break;
+                            case 6:
+                                status = "Cancelled by admin"
+                            default:
+                                break;
+                        }
+                    %>
+                    <p class="card-text">  <b>Status:  <%= status %> on <%=formattedDate  %></b> </p><br>
+
+                    
+                    <!-- <a href="/cancelOrder?_id=<%= order._id %>&productId=<%= order.productId %>" class="btn fw-bold text-white" <% if (order.orderStatus >= 2) { %>hidden<% } %> style="background-color:#c0130a;">CANCEL</a> -->
+                    <a href="/cancelOrder?_id=<%= order._id %>&productId=><%= order.productId %>" class="btn fw-bold text-white" <% if(order.orderStatus >=2){%> hidden <% } %> style="background-color:#c0130a;"
+                        data-toggle="modal" data-target = "#confirmCancelModal"
+                        > CANCEL</a>
+ <!-- Modal -->
+ <div class="modal fade" id="confirmCancelModal" tabindex="-1" role="dialog"
+ aria-labelledby="confirmationModalLabel" aria-hidden="true">
+ <div class="modal-dialog" role="document">
+     <div class="modal-content">
+         <div class="modal-header">
+             <h5 class="modal-title" id="confirmationModalLabel">Confirmation
+             </h5>
+             <button type="button" class="close" data-dismiss="modal"
+                 aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+             </button>
+         </div>
+         <div class="modal-body">
+             <!-- Add confirmation message or content here -->
+             Are you sure you want to Cancel the product ?
+                 
+         </div>
+         <div class="modal-footer">
+             <button type="button" class="btn btn-secondary"
+                 data-dismiss="modal">Close</button>
+             <!-- Add your action button (Block/Unblock) here -->
+             <a href="/cancelOrder?_id=<%= order._id %>&productId=<%= order.productId %>" class="btn btn-danger">Cancel</a>
+         </div>
+     </div>
+ </div>
+</div>
+<a href="/admin/viewDetails?id=<%=order._id%>" class="btn text-white fw-bold w-50 py-1.5">view Details</a>
+
+
+
+
+                </div>
+                </div>
+        </div>
+        <%}) } %>
+                  </div>
+        </div>
+    </div>
+</section>
+  
+<%- include("./footer.ejs") -%>

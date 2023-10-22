@@ -1,0 +1,138 @@
+<%- include("../admin/header.ejs") %>
+
+
+
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="#" class="brand">
+            <img src="/admin/assets/logo.png"
+                style="width:5rem;height:5rem;margin-top: 20%;margin-left: 10%; border-radius: 50%;" alt="...">
+
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="/admin/home" class="text-decoration-none">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/user" class="text-decoration-none">
+                    <img src="/admin/assets/usericon.png" alt="user" style="width:1rem;">&nbsp;&nbsp;
+                    <span class="text">Users</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/category" class="text-decoration-none">
+                    <img src="/admin/assets/category.png" alt="user" style="width:1rem;">&nbsp;&nbsp;
+                    <span class="text">Categories</span>
+                </a>
+            </li>
+            <li class="">
+                <a href="/admin/product" class="text-decoration-none">
+                    <img src="/admin/assets/producticon.png" alt="product" style="width:1.3rem;">&nbsp;&nbsp;
+                    <span class="text">Product</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/orders" class="text-decoration-none">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Order</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Coupons</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Check out</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="/admin/adminLogout" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <!-- SIDEBAR -->
+
+
+
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <nav>
+            <i class='bx bx-menu'></i>
+            <form action="#">
+                <div class="form-input">
+                    <!-- for the space -->
+
+                </div>
+            </form>
+        </nav>
+        <!-- NAVBAR -->
+
+        <!-- MAIN -->
+        <main>
+
+            <div class="table-data">
+                <div class="order bg-gradient">
+                    <div class="p-3 d-flex" style="border: 2px solid grey;">
+                        <% if (orderFound) { %>
+                         
+                            <div style="width: 5rem">
+                              <img src="/images/<%= orderFound.product_id.image[0].filename %>" alt="" class="img-fluid">
+                            </div>
+                            <div class="mx-5">
+                              <p class="fw-bold mb-0"><%= orderFound.product_id.productname %></p>
+                              <p class="fw-bold mb-0">Quantity: <%= orderFound.count %></p>
+                              <p class="fw-bold mb-0">Price: ₹<%= orderFound.count * orderFound.price %></p>
+                              <p class="fw-bold mb-0">Status: <%= orderFound.orderStatus %></p>
+                            </div>
+                         
+                        <% } else { %>
+                          <p>No items found in the order.</p>
+                        <% } %>
+                      </div>
+                      
+                </div>
+            </div>
+            </div>
+            
+            <div class="table-data mt-0">
+                <div class="order bg-gradient">
+                    <div class="p-3" style="border: 2px solid grey;">
+                        <h6>Delivery Address</h6>
+                        <% if(orderFound){ %>
+                        
+                            <div class="mx-0">               
+                                <p class="fw-bold mb-0"><%=orderFound.address.name %></p>
+                                <p class="mb-0"><%=orderFound.address.address%>,<%=orderFound.address.locality%>,<%=orderFound.address.city%>,<%=orderFound.address.state%>-<%=orderFound.address.pincode%></p>
+                                <p class="fw-bold mb-0"><%=orderFound.address.phone%></p>
+                            </div>
+                      <% } %>
+                    </div>  
+                   
+                </div>
+            </div>
+            
+        </main>
+        <!-- MAIN -->
+    </section>
+    <!-- CONTENT -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="/admin/js/alertMessage.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+
+    <%- include("../admin/footerpage.ejs") %>

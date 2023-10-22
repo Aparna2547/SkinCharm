@@ -1,0 +1,38 @@
+<%- include("./head.ejs") -%>
+<%- include("./header.ejs") -%>
+
+<section>
+<%-  include("./profilebar.ejs")-%>
+<h5 class="card-title fw-bold mb-5">SAVED ADDRESS:</h5>
+<div class="d-flex justify-content-end" style="margin-right:0rem;">                     
+  <a href="/addAddress" class="fw-bold fs-6 text-decoration-none text-dark mr-3">  +ADD NEW ADDRESS</a>
+</div>
+<% if (addressData && addressData.address && addressData.address.length) { %>                               
+    <% addressData.address.forEach((item) =>{ %>
+
+      <div class="border rounded p-3 mt-1">
+
+      <label for="<%= item._id %>">
+        
+        <p class="fw-bold fs-4"><%= item.name %></p>
+        <p class="mt-0 fs-6 text-muted"><%= item.address %>,<%= item.locality %><br>
+            <%= item.city %>,<%= item.state %>-<%= item.pincode %></p>
+        <p class=" mt-0 fs-5 fw-bold"><%= item.phone %></p> 
+      </label>
+      <div class="d-flex">
+        <div>
+            <a href="/editAddressProfile?_id=<%= item._id %>" class="btn ls fw-bold text-white" style="background-color:#a30052;">EDIT</a>
+        </div>
+        <div class="mx-2">
+            <a href="/deleteAddress?_id=<%= item._id %>" class="btn  fw-bold text-white" style="background-color:#c90e04;">REMOVE</a>
+        </div>
+      </div>
+    </div>
+    <% }); %>
+  <% } %>
+                  </div>
+        </div>
+    </div>
+</section>
+
+<%- include("./footer.ejs") -%>

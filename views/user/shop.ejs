@@ -1,0 +1,169 @@
+<%- include("./head.ejs") -%>
+
+    <%- include("./header.ejs") -%>
+
+
+
+
+        <!-- Shop Section Begin -->
+        <section class="shop spad" style="background-color: #f3f3f3;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="shop__sidebar ">
+                            <!-- <div class="shop__sidebar__search">
+                        <form action="#">
+                            <input type="text" placeholder="Search...">
+                            <button type="submit"><span class="icon_search"></span></button>
+                        </form>
+                    </div> -->
+                            <div class="shop__sidebar__accordion mt-5">
+                                <div class="accordion bg-white p-3" id="accordionExample">
+                                    <div class="card">
+                                        <div class="card-heading">
+                                            <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                        </div>
+                                        <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+
+                                            <div class="container">
+                                                <div class="row">
+                                                    <%category.forEach(cat=>{ %>
+                                                        <div class="col-md-12 d-block">
+                                                            <form action="">
+                                                                <input type="checkbox" name ="<%=cat.category%>" id="<%=cat.category%>">  <a href="<%=cat.category%>" class="text-decoration-none"></a>
+                                                          
+                                                                <h5 class="fs-7">
+                                                                    <%= cat.category %>
+                                                                </h5>
+                                                            </a>
+                                                        </form>
+                                                        </div>
+                                                        <%})%>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-heading">
+                                            <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
+                                        </div>
+                                        <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="shop__sidebar__brand">
+                                                    <!-- <ul>
+                                                <li><a href="#">Louis Vuitton</a></li>
+                                                <li><a href="#">Chanel</a></li>
+                                                <li><a href="#">Hermes</a></li>
+                                                <li><a href="#">Gucci</a></li>
+                                            </ul> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-heading">
+                                            <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
+                                        </div>
+                                        <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="shop__sidebar__price">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--          -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="shop__product__option">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <!-- <div class="shop__product__option__left">
+                                <p>Showing 1–12 of 126 results</p>
+                            </div> -->
+                                </div>
+                                <!-- <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="shop__product__option__right">
+                                <p>Sort by Price:</p>
+                                <select>
+                                    <option value="">Low To High</option>
+                                    <option value="">$0 - $55</option>
+                                    <option value="">$55 - $100</option>
+                                </select>
+                            </div>
+                        </div> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <% products.forEach((product)=>{ %>
+                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                    <div class="product__item p-2" style="background-color: white;min-height: 22rem;">
+                                        <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
+                                            <ul class="product__hover">
+                                                <li><a href="/singleProductpage?id=<%=product.id %>"><img
+                                                            class="img-fluid"
+                                                            src="/images/<%= product.image[0]?.filename %>"
+                                                            alt="image"></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="product__item__text  mt-5 mt-lg-0">
+                                            <h6>
+                                                <%= product.productname %>
+                                            </h6>
+                                            <!-- <a href="#" class="add-cart m-1">+ Add To Cart</a> -->
+                                            <p class="my-2 fs-7  fw-bold"><strike class="text-muted">₹
+                                                    <%=product.actualPrice %></strike> ₹<%= product.sellingPrice %>
+                                            </p>
+                                        </div>
+                                        <!-- <a href="/addToWishlist?productId=<%= product._id%>" id="wishlistId" class="btn ls fw-bold w-100 text-white" class="btn fw-bold disabled text-white py-2" style="font-size:1rem; background-color:#c70261; height:3rem; width:10rem; ">WISHLIST</a> -->
+                                       
+                                       <a href="#" data-product-id="<%= product._id %>" class="btn ls fw-bold w-100 text-white add-to-wishlist py-2" style="font-size: 1rem; background-color: #c70261; height: 3rem; width: 10rem;">WISHLIST</a>
+
+                                    </div>
+                                </div>
+                                <% }) %>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Shop Section End -->
+
+
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+       <script>
+        $(document).ready(function () {
+  $('.add-to-wishlist').click(function (e) {
+    e.preventDefault(); // Prevent the default behavior of following the link
+
+    var productId = $(this).data('product-id');
+
+    $.ajax({
+      url: '/addToWishlist', // Replace with the actual URL for adding to the wishlist
+      type: 'GET', // Use GET or POST as per your server's requirements
+      data: { productId: productId }, // Send the product ID to the server
+      success: function (response) {
+        // Handle the server response, e.g., show a success message
+        alert('Product added to wishlist!');
+      },
+      error: function (xhr, status, error) {
+        // Handle errors here
+        console.log('Error: ' + error);
+      }
+    });
+  });
+});
+
+       </script>
+
+
+        <%- include("./footer.ejs") -%>

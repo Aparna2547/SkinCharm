@@ -1,0 +1,61 @@
+<%- include('./head.ejs') %>
+    <%- include('./header.ejs') %>
+
+<!-- if cart is empty -->
+<% if(!Data || Data?.product?.length == 0){ %>
+
+    <div style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div style="width: 20rem;">
+          <img src="/user/assets/emptyWishlistpng.png" alt="empty wishlist" class="img-fluid">
+        </div>
+        <div class="text-center">
+            <a href="/shop" class="btn w-100 text-white fw-bold">GO TO SHOP</a>
+          </div>
+      </div>
+    
+
+<% }else{ %>
+        <main style="min-height: 100vh;" class="py-5">
+            <div class="container">
+                <div class="row">
+                    <%if(Data && Data.product && Data.product.length){%>
+                        <% Data.product.forEach((product)=>{ %>
+                            <div class="col-lg-3 col-md-6 col-sm-4">
+                                <div class="mt-5">
+                                    <a href="/wishlistDelete?productId=<%= product.product_id._id%>"> <i class="fa fa-close text-dark" style="font-size:24px; float:right"></i></a>
+                                </div>
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
+                                       
+                                        <ul class="product__hover">
+                                            <li><a href="/singleProductpage?id=<%=product.product_id._id %>"><img
+                                                        class="img-fluid"
+                                                        src="/images/<%= product.product_id.image[0]?.filename %>"
+                                                        alt="image"></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="product__item__text  mt-5 mt-md-0">
+                                        <h6>
+                                            <%= product.product_id.productname %>
+                                        </h6>
+                                        <!-- <a href="#" class="add-cart">+ Add To Cart</a> -->
+                                        <h5 class="my-2">₹<%= product.product_id.sellingPrice %>
+                                        </h5>
+                                    </div>
+                                    <!-- <div class="mt-5">
+                                        <a href="/wishlistDelete?productId=<%= product.product_id._id%>" class="btn w-100 fw-bold text-white "> REMOVE</a>
+                                    </div> -->
+                                      <!-- for add to cart -->
+                                    <!-- <% if (productFound && productFound.product && productFound.product.length > 0) { %>
+                                        <a href="/cart" class="btn btn-danger fw-bold ls" style="background-color:white;height:3rem; width:10rem"><i class="fa fa-shopping-cart text-light py-2" style="font-size:1rem; "></i>GO TO CART</a>
+                                    <% } else { %>
+                                        <a href="/addToCart?productId=<%= product._id %>" class="btn text-danger fw-bold " style="background-color: white;height:3rem; width:10rem"><i class="fa fa-shopping-cart text-light py-2" style="font-size:1rem; "></i>ADD TO CART</a>
+                                    <% } %> -->
+                                </div>
+                            </div>
+                            <% }) }%>
+                </div>
+            </div>
+        </main>
+        <% }%>
+        <%- include('./footer.ejs') %>

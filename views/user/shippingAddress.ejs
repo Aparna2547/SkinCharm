@@ -1,0 +1,81 @@
+<%- include('./head.ejs') %>
+<%- include('./header.ejs') %>
+
+
+<% try { %>
+
+
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
+    <div class="container border-top">
+        <div class="row">
+            <div class="col-lg-8 border-left">
+                    <div class="col-lg-10  mr-0 mt-4 p-2 border" style="margin-right: 20rem;">
+                        <div class="row">
+                            <div class="d-flex col-lg-12">
+                                <div class="col-lg-6" style="margin-left:0rem;">
+                            <p class="fs-5 mb-0 fw-bold">Select an address</p>   </div>
+                         <div class="col-lg-8" style="margin-right:0rem;">                     
+                                <a href="/addAddressCart" class="fw-bold fs-6 text-decoration-none text-dark mr-3">  +ADD NEW ADDRESS</a>
+                            </div>
+                            </div>
+                        <form action="/addressSelected" method="post">
+                            <%=console.log(addressData)%>
+                            <% if (addressData && addressData.address && addressData.address.length) { %>                               
+                                <% addressData.address.forEach((item) => { %>
+
+                                  <div class="border shadow rounded p-3 mt-1">
+
+                                  <label for="<%= item._id %>">
+                                    <input type="radio" id="<%= item._id %>" <%= addressData.address.indexOf(item)==0 && 'checked'  %> name="address" value="<%= item._id %>">
+
+                                    <p class="fw-bold fs-4"><%= item.name %></p>
+                                    <p class="mt-0 fs-6 text-muted"><%= item.address %>,<%= item.locality %><br>
+                                        <%= item.city %>,<%= item.state %>-<%= item.pincode %></p>
+                                    <p class=" mt-0 fs-5 fw-bold"><%= item.phone %></p> 
+                                  </label>
+                                  <div class="d-flex">
+                                    <div>
+                                        <a href="/editCartAddress?_id=<%= item._id %>" class="btn fw-bold text-white ls" style="background-color:#c70261;">EDIT</a>
+                                    </div>
+                                    <div class="mx-2">
+                                        <a href="/deleteCartAddress?_id=<%=item._id  %>" class="btn fw-bold text-white" style="background-color:#c70261;">REMOVE</a>
+                                    </div>
+                                  </div>
+                                </div>
+                                <% }); %>
+                              <% } %>
+
+                              <div class="d-flex justify-content-center mt-5">
+                                <input type="submit" value="DELIVER TO THIS ADDRESS" class="w-100 fw-bold btn text-white ls" style="background-color:#c70261;">
+                              </div>
+                        </form>
+                        
+                                   
+                    </div>
+                
+                </div>
+            </div>
+            <div class="col-lg-4 me-0">
+                
+                <div class="cart__total mt-5">
+                    <h6>Cart total</h6>
+                    <ul>
+                        <!-- <li>Subtotal <span>$ 169.50</span></li> -->
+                        <li class="fw-bold">Total <span id="total">₹ <%= total %></span></li>
+                    </ul>
+                    <!-- <a href="/checkout" class="primary-btn">Proceed to checkout</a> -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shopping Cart Section End -->
+<%- include('./footer.ejs') %>
+
+<% }catch(error) { %>
+    <p>An error occurred: <%= error.message %></p>
+<% } %>
+
+

@@ -1,0 +1,291 @@
+<%- include("../admin/header.ejs") %>
+
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="#" class="brand">
+                     <img src="/admin/assets/logo.png" style="width:5rem;height:5rem;margin-top: 20%;margin-left: 10%; border-radius: 50%;" alt="...">
+
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="/admin/home" class="text-decoration-none">
+            <i class='bx bxs-dashboard'></i>
+            <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/user" class="text-decoration-none">
+                    <img src="/admin/assets/usericon.png" alt="user" style="width:1rem;">&nbsp;&nbsp;
+                    <span class="text">Users</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="/admin/category" class="text-decoration-none">
+                    <img src="/admin/assets/category.png" alt="user" style="width:1rem;">&nbsp;&nbsp;
+                    <span class="text">Categories</span>
+                </a>
+            </li>
+            <li >
+                <a href="/admin/product"class="text-decoration-none">
+                    <img src="/admin/assets/producticon.png" alt="product" style="width:1.3rem;">&nbsp;&nbsp;
+                    <span class="text">Product</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/orders" class="text-decoration-none">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Order</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="text-decoration-none">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Coupons</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Check out</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="/admin/adminLogout" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <!-- SIDEBAR -->
+
+
+
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <nav>
+            <i class='bx bx-menu'></i>
+            <!-- <a href="#" class="/nav-link">Categories</a> -->
+            <form action="#">
+                <div class="form-input">
+                    <!-- for the space -->
+
+                </div>
+            </form>
+            
+          
+        </nav>
+        <!-- NAVBAR -->
+
+        <!-- MAIN -->
+        <main>
+            <!-- <div class="head-title">
+                <div class="left">
+                    <h1>Category</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="/admin/home">Dashboard</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a class="active" href="/admin/category">Categories</a>
+                        </li>
+                    </ul>
+                </div>
+            </div> -->
+            <div class="table-data">
+                <div class="order">
+                    <div class="head">
+                        <h3>Categories</h3>
+                        <!--search  -->
+                        <div class="col-xs-12 col-sm-3">
+                            <form class="search-box d-flex">
+                                <input type="text" name="search" class="form-control d-inline" name="search" placeholder="Search...">
+                                <!-- <button class="btn btn-light d-inline" type="submit">Search</button> -->
+                            </form>
+                        </div>
+                        
+                 <!-- Button trigger modal add new category -->
+ <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+Add new Category
+  </button>
+  
+  <!-- Modal 1 for category-->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+            <form action="/admin/newCategory" method="post" id="formId" enctype="multipart/form-data">
+
+                <!-- category input -->
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form3Example3">Category</label>
+                    <input type="text" id="category" name="category" class="form-control" />
+                </div>
+                <!-- image input -->
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form3Example3">Image</label>
+                    <input id="catImage" type="file" name="image" class="form-control" />
+                </div>
+
+                <div id="errorMessage" class="text-center fw-bold text-danger"></div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-block mb-4 w-100">
+                    Add Category
+                </button>
+
+
+            </form>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- forr brands -->
+     <!-- Button trigger modal -->
+     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+        Add new Brand
+          </button>
+          
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Add Brand</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card bg-glass">
+                        <div class="card-body px-4 py-5 px-md-5">
+                    <form action="/admin/addBrand" method="post" id="formIdBrand" >
+        
+                        <!-- brand input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="form3Example3">Brand name</label>
+                            <input type="text" id="brand" name="brandname" class="form-control" required />
+                        </div>
+        
+                        
+        
+                        <div id="errorMessage" class="text-center text-danger"></div>
+        
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-primary btn-block mb-4 w-100">
+                            Add brand
+                        </button>
+        
+        
+                    </form>
+                    </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- modal ends -->
+                            </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th> Image</th>
+                                <th>Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% Data.forEach(cat=>{ %>
+                                <tr>
+                                    <td>
+                                        <img style="width:4rem; height: 4rem; border-radius: 0;" src="/images/<%= cat.image%>" alt="">
+                                    </td>
+                                    <td>
+                                        <%= cat.category%>
+                                    </td>
+                                    <td>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a class="btn btn-primary" href="/admin/editCategory?_id=<%= cat._id %>">edit</a>
+          <!-- <a class="btn <%= cat.isListed ? 'btn-info' : 'btn-danger' %>" href="/admin/listCategory?id=<%= cat._id %>" onclick="return alertMessage();"><%= cat.isListed ? 'List' : 'Unlist' %></a></td> -->
+          <a class="btn  <%= cat.isListed ? 'btn-info': 'btnbtn-danger' %>"
+             href="/admin/listCategory?id=<%= cat._id %>"
+             data-toggle="modal" data-target="#listeditModal">
+             <%= cat.isListed ? 'List' : 'Unlist' %></a>
+
+
+              <!-- Modal -->
+              <div class="modal fade" id="listeditModal" tabindex="-1" role="dialog"
+              aria-labelledby="confirmationModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="confirmationModalLabel">Confirmation
+                          </h5>
+                          <button type="button" class="close" data-dismiss="modal"
+                              aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                          <!-- Add confirmation message or content here -->
+                          Are you sure you want to <%= cat.isListed ? 'Unlist' : 'list' %>
+                              this category?
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary"
+                              data-dismiss="modal">Close</button>
+                          <!-- Add your action button (Block/Unblock) here -->
+                          <a class="btn <%= cat.isListed ? 'btn-danger' : 'btn-primary' %>"
+                              href="/admin/listCategory?id=<%= cat._id%>">
+                              <%= cat.isListed? 'Unlist' : 'List' %>
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+                                </tr>
+                                <% })%>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+
+
+            <div class="pagination-container text-center">
+                <% if (currentPage > 1) { %>
+                  <a href="?search=<%= search %>&page=<%= currentPage - 1 %>" class="pagination-arrow previous"><</a>
+                <% } %>
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                  <a href="?search=<%= search %>&page=<%= i %>" class="pagination-number fs-5 fw-bold<%= i === currentPage ? ' active' : '' %>"><%= i %></a>
+                <% } %>
+                <% if (currentPage < totalPages) { %>
+                  <a href="?search=<%= search %>&page=<%= currentPage + 1 %>" class="pagination-arrow next">></a>
+                <% } %>
+              </div>
+        </main>
+        <!-- MAIN -->
+    </section>
+    <!-- CONTENT -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="/admin/js/alertMessage.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="/admin/js/catValidation.js"></script>
+    <!-- <script src="/admin/js/catBrand.js"    ></script> -->
+
+    <%- include("../admin/footerpage.ejs") %>

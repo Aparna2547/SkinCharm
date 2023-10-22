@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body>
+    <%- include("../admin/header.ejs") %>
+
+
+        <div class="row" style="padding-left: 280px;">
+            <!-- SIDEBAR -->
+            <section id="sidebar" class="col-md-4">
+                <a href="#" class="brand">
+                    <img src="/admin/assets/logo.png"
+                        style="width:5rem;height:5rem;margin-top: 20%;margin-left: 10%; border-radius: 50%;" alt="...">
+
+                </a>
+                <ul class="side-menu top">
+                    <li>
+                        <a href="/admin/home" class="text-decoration-none">
+                            <i class='bx bxs-dashboard'></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/user" class="text-decoration-none">
+                            <img src="/admin/assets/usericon.png" alt="user" style="width:1rem;">&nbsp;&nbsp;
+                            <span class="text">Users</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/category" class="text-decoration-none">
+                            <img src="/admin/assets/category.png" alt="user" style="width:1rem;">&nbsp;&nbsp;
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="/admin/product" class="text-decoration-none">
+                            <img src="/admin/assets/producticon.png" alt="product" style="width:1.3rem;">&nbsp;&nbsp;
+                            <span class="text">Product</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class='bx bxs-message-dots'></i>
+                            <span class="text">Order</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class='bx bxs-group'></i>
+                            <span class="text">Coupons</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class='bx bxs-group'></i>
+                            <span class="text">Check out</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="side-menu">
+                    <li>
+                        <a href="/admin/adminLogout" class="logout">
+                            <i class='bx bxs-log-out-circle'></i>
+                            <span class="text">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="background-radial-gradient overflow-hidden col-md-12">
+
+                <h2 class="text-center text-secondary mt-5 mb-0">NEW PRODUCT</h2>
+                <div class="container px-4 py-5 px-md-5 text-center text-lg-start mt-0 w-75">
+                    <div class="row gx-lg-5 align-items-center mb-5">
+                        <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+                        </div>
+
+                        <div class="col-lg-6 mb-5 mb-lg-0 position-relative w-100">
+                            <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+                            <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+                            <div class="card bg-glass">
+                                <div class="card-body px-4 py-5 px-md-5">
+
+
+                                    <% if(typeof message !=='undefined' ){ %>
+                                        <h2>
+                                            <%= message %>
+                                        </h2>
+                                        <% } %>
+                                            <form action="/admin/addProduct" method="post" id="formId"
+                                                enctype="multipart/form-data">
+
+
+                                                <!-- product input -->
+                                                <div class="form-outline mb-4">
+                                                    <label class="form-label" for="form3Example3">Product</label>
+                                                    <input type="text" id="product" name="productname"
+                                                        class="form-control" />
+                                                </div>
+
+                                                <!-- category input -->
+                                                <div class="form-outline mb-4">
+
+                                                    <label class="form-label" for="form3Example3">Category</label>
+                                                    <!-- <input type="text" id="category" name="category" class="form-control" /> -->
+                                                    <select class="form-control" name="category" id="category">
+                                                        <option value="selected" selected>select a category</option>
+                                                        <% category.forEach(cat=>{ %>
+                                                            <option value="<%=cat._id%>">
+                                                                <%=cat.category%>
+                                                            </option>
+                                                            <%})%>
+                                                    </select>
+                                                </div>
+
+                                                <!-- brand input -->
+                                                <div class="form-outline mb-4">
+                                                    <label class="form-label" for="form3Example3">Brand name</label>
+                                                    <select class="form-control" name="brand" id="brand">
+                                                        <option value="selected" selected>select a brand</option>
+                                                        <% category[0].brands.forEach(brand=>{ %>
+                                                            <option value="<%=brand%>">
+                                                                <%=brand%>
+                                                            </option>
+                                                            <%})%>
+                                                    </select>
+                                                </div>
+
+                                                <!-- actual price input -->
+                                                <div class="form-outline mb-4">
+                                                    <label class="form-label" for="form3Example3">Actual Price</label>
+                                                    <input type="text" id="actualPrice" name="actualPrice"
+                                                        class="form-control" />
+                                                </div>
+
+                                                <!-- selling price input -->
+                                                <div class="form-outline mb-4">
+                                                    <label class="form-label" for="form3Example3">Selling Price</label>
+                                                    <input type="text" id="sellingPrice" name="sellingPrice"
+                                                        class="form-control" />
+                                                </div>
+
+                                                <!-- Stick input -->
+                                                <div class="form-outline mb-4">
+                                                    <label class="form-label" for="form3Example3">Stock</label>
+                                                    <input type="text" id="stock" name="stock" class="form-control" />
+                                                </div>
+
+                                                <!-- description input -->
+                                                <div class="form-outline mb-4">
+                                                    <label class="form-label" for="form3Example3">description</label>
+                                                    <textarea name="description" id="description" cols="10" rows="5"
+                                                        class="form-control"></textarea>
+
+                                                </div>
+
+                                                <!-- image input -->
+
+                                                <label class="form-label" for="form3Example3">Image</label>
+                                                <div class="form-outline mb-4 d-flex">
+
+                                                    <input type="file" id="image1" name="image"
+                                                        class="form-control m-2" />
+                                                    <input type="file" id="image2" name="image"
+                                                        class="form-control m-2" />
+                                                    <input type="file" id="image3" name="image"
+                                                        class="form-control m-2" />
+
+                                                </div>
+
+
+                                                <div id="errorMessage" class="text-center text-danger m-1 fw-bold">
+                                                </div>
+
+                                                <!-- Submit button -->
+                                                <button type="submit" class="btn btn-primary btn-block mb-4 w-100">
+                                                    Add Product
+                                                </button>
+
+
+                                            </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Section: Design Block -->
+        </div>
+        <script src="/admin/js/addproductValidate.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>

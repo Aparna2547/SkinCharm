@@ -1,0 +1,97 @@
+<%- include('./head.ejs') %>
+    <%- include('./header.ejs') %>
+
+
+        <% try { %>
+
+
+            <!-- Shopping Cart Section Begin -->
+            <section class="shopping-cart spad">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="row justify-content-center">
+                                
+                                <h4> Select a payment method</h4>
+                                <div class="col-lg-4 me-0 border shadow mt-4 p-4 w-50">
+                                      
+                                    <!-- <form action="/checkOut" method="POST" id="checkoutForm">
+                                        <input type="radio" id="cod"  <%=  'checked'  %> name="payment" value="cash">
+                                        <label for="cod" class="fw-bold">Cash on Delivery</label><br>
+                                        <input type="radio" id="onp" name="payment" value="online">
+                                        <label for="onp"  class="fw-bold">Online payment</label><br>
+                                        <button type="submit" class="btn w-100 fw-bold text-white ls mt-3" style="background-color:#c70261;">PLACE ORDER</button>
+                                    </form> -->
+                                    
+                                     <form  id="checkoutForm">
+                                        <input type="radio" id="cod"  <%=  'checked'  %> name="payment" value="cash">
+                                        <label for="cod" class="fw-bold">Cash on Delivery</label><br>
+                                        <input type="radio" id="onp" name="payment" value="online">
+                                        <label for="onp"  class="fw-bold">Online payment</label><br>
+                                        <button type="submit" class="btn w-100 fw-bold text-white ls mt-3" style="background-color:#c70261;">PLACE ORDER</button>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 me-0 border shadow">
+
+                            <div class="cart__total bg-white">
+                                <h6>Cart total</h6>
+                                <ul>
+                                    <!-- <li>Subtotal <span>$ 169.50</span></li> -->
+                                    <li class="fw-bold">Total <span id="total">₹ <%= total %></span></li>
+                                </ul>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+              
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+            <script>
+                $('#checkoutForm').submit((e)=>{
+                    e.preventDefault()
+                    $.ajax({
+                        url:"/checkOut",
+                        method:'post',
+                        data:$("#checkoutForm").serialize(),
+                     success:function(res){
+                        if(res.success){
+                            var options = {
+                                "key":"" + res.key_id + "",
+                                "amount" : "" + res.total+"",
+                                "currency" : "INR",
+                                "order_id" :"" +res.order_id +"",
+                                "handler" : function (response){
+                                    alert("payment sucessful")
+                                }
+                              
+
+                            };
+                            var razorpayObject = new Razorpay(options);
+                            razorpayObject.on('payment-failed',function(response){
+                                alert('payment failed')
+                            })
+                            razorpayObject.open();
+                        }
+                        else{
+                            alert(req.msg)
+                        }
+                     }
+                    })
+                })
+
+                function payPayment(order,user,OrderId){
+
+                }
+            </script>
+            <!-- Shopping Cart Section End -->
+            <%- include('./footer.ejs') %>
+
+                <% }catch(error) { %>
+                    <p>An error occurred: <%= error.message %>
+                    </p>
+                    <% } %>

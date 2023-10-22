@@ -1,0 +1,50 @@
+.wraper{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#login{
+    width: 450px;
+}
+.frm-outline {
+  border-radius: 0.4rem;
+  background-color: rgb(70, 66, 66);
+}
+
+.form-group {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 0;
+}
+.form-group span{
+    margin-left: 0;
+    padding-left: 0;
+    
+}
+.text-muted {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.labeltxt {
+  font-weight: bold !important ;
+  margin-left: 0;
+  padding-left: 0;
+}
+.subtitle {
+  font-size: 11px;
+  color: rgba(177, 177, 177, 0.3);
+  position: absolute;
+}
+#login {
+  display: flex;
+}
+
+#frm-block {
+  margin-top: 60px;
+  border-radius: 10px;
+  box-shadow: 5px 10px 28px;
+  background-color: white;
+}

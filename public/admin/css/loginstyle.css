@@ -1,0 +1,32 @@
+
+
+.main-div{
+  min-height: 100vh;
+  background-image: url('/admin/assets/background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+ }
+
+ .frm-div
+ {
+  width:21rem;
+  border-radius:90px;
+  background-color: #fff;
+  box-shadow: 5px 10px 28px;
+  min-height:60vh;
+ }
+
+
+ .frm-form{
+  margin-top: 5%;
+  padding :7% ; 
+ }
+
+ .btn{
+    background-color: #e64a4a;
+    width: 90px;
+
+ }
+/* 
+ style="min-height: 96vh; background-color: blueviolet;"
+ style="width: 21rem; background-color: #fff;"  */

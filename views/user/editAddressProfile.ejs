@@ -1,0 +1,46 @@
+
+<%- include('./head.ejs') %>
+
+ 
+
+<section class="wraper">
+    <div class="text-center container" id="login">
+        <div class="container pt-3 pb-3" id="frm-block">
+            <div class="title pb-3">
+                <h4 class="fw-bold pt-2">EDIT ADDRESS </h4>
+            </div>
+
+            <form action="/editAddressProfile" method="POST">
+                <div class="form-group pt-0">
+                    <input type="hidden" id="id" name="id" value="<%=address._id %>" class="form-control" />
+                </div>
+
+                <div class="form-group pt-0">
+                    <input type="text" name="name" id="name" value="<%= address.name %>" placeholder="Name" class="form-control" required>
+                </div>
+                <div class="form-group pt-3">
+                    <input type="text" name="phone" id="phone" value="<%= address.phone %>" placeholder="Mobile Number" class="form-control" required>
+                </div>
+                <div class="form-group pt-3">
+                    <input type="text" name="address" id="address" value="<%= address.address %>" placeholder="Address" class="form-control" required>
+                </div>
+                <div class="form-group pt-3">
+                    <input type="text" name="locality" id="locality" value="<%= address.locality%>" placeholder="Locality" class="form-control" required>
+                </div>
+                <div class="form-group pt-3">
+                    <input type="text" name="pincode" id="pincode" placeholder="Pincode" value="<%= address.pincode %>" class="form-control" required>
+                </div>
+                <div class="form-group pt-3">
+                    <input type="text" name="city" id="city" placeholder="City" value="<%= address.city %>" class="form-control" required>
+                </div>
+                <div class="form-group pt-3">
+                    <input type="text" name="state" id="state" placeholder="State" value="<%= address.state %>" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-success mt-3 w-75 fw-bold"  id="submitButton">EDIT ADDRESS</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+
