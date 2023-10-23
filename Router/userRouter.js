@@ -117,23 +117,26 @@ userRoute.get('/placeOrder',nocache(),orderController.loadPlaceOrder)
 //post
 userRoute.post('/checkOut',orderController.orderPlace)
 
+
+//verifypayment for razor pay
+userRoute.post('/verifyPayment',orderController.verifyPayment)
 //get for delivery
-userRoute.get('/Delivery',nocache(),userAuth.isLogin,orderController.Delivery)
+userRoute.get('/orderSuccess',nocache(),userAuth.isLogin,orderController.Delivery)
 
 //payment - Post
 userRoute.post('/payment',nocache(),addressController.payment)
 
 //payment - get onilne
-userRoute.get('/payment',nocache(),orderController.paymentMethod)
+// userRoute.get('/payment',orderController.paymentMethod)
 
 
 
 
 //user profile page rendering
-userRoute.get('/Profile',nocache(),userAuth.isLogin,userController.loadUserProfile)
+userRoute.get('/Profile',userAuth.isLogin,userController.loadUserProfile)
 
 //user profile page - POST
-userRoute.post('/Profile',nocache(),userController.profile)
+userRoute.post('/Profile',userController.profile)
 
 //user edit profile
 userRoute.get('/editProfile',userAuth.isLogin,userController.LoadUserEditProfile)
@@ -154,6 +157,9 @@ userRoute.get('/editAddressProfile',userAuth.isLogin,addressController.editAddre
 
 //editaddress -post
 userRoute.post('/editAddressProfile',addressController.editAddressProfile)
+
+//view Order details in user side
+userRoute.get('/orderDetails',userAuth.isLogin,orderController.viewDetailsUser)
 
 //cancel order
 userRoute.get('/cancelOrder',userAuth.isLogin,orderController.cancelOrder)

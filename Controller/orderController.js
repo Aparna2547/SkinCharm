@@ -1,12 +1,13 @@
 const Product = require("../model/productModel");
 const Address = require("../model/addressModel");
+const User = require('../model/userModel')
 const Cart = require("../model/cartModel");
 const Order = require("../model/orderModel");
 const session = require("express-session");
-const mongoose = require('mongoose')
-const Razorpay = require('razorpay')
-const { RAZORPAY_ID_KEY,RAZORPAY_SECRET_KEY} = process.env;
-
+const mongoose = require("mongoose");
+const Razorpay = require("razorpay");
+const crypto = require('crypto')
+const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
 
 ///for razorpay
 // const razorpayInstance = new Razorpay({
@@ -14,73 +15,65 @@ const { RAZORPAY_ID_KEY,RAZORPAY_SECRET_KEY} = process.env;
 //   key_secret:RAZORPAY_SECRET_KEY
 // });
 
-
-// const Razorpay = require('razorpay');
-var instance = new Razorpay({ key_id: RAZORPAY_ID_KEY, key_secret: RAZORPAY_SECRET_KEY})
-
-const generateRazorpay =  (orderId,total)=>{
-  console.log(orderId,total);
-  return new Promise((resolve,reject)=>{
-
-var options = {
-  amount: total*100,  // amount in the smallest currency unit
-  currency: "INR",
-  receipt: orderId
-};
-instance.orders.create(options, function(err, order) {
-  if(!err){
-    res.status(200).send({
-      success:true,
-      msg:"order Created",
-      order_id:orderId,
-      amount:total,
-      key_id:RAZORPAY_ID_KEY,
-    })
-  }
-  else{
-    res.status(400).send({success:false,msg:"Something went wrong"});
-  }
-  console.log(order);
-  resolve(order)
+var instance = new Razorpay({
+  key_id: RAZORPAY_ID_KEY,
+  key_secret: RAZORPAY_SECRET_KEY,
 });
-  })
-}
 
-
+// const generateRazorpay = (orderId, total) => {
+//   console.log(orderId, total);
+//   return new Promise((resolve, reject) => {
+//     instance.orders.create(options, function (err, order) {
+//       if (!err) {
+//         res.status(200).send({
+//           success: true,
+//           msg: "order Created",
+//           order_id: orderId,
+//           amount: total,
+//           key_id: RAZORPAY_ID_KEY,
+//         });
+//       } else {
+//         res.status(400).send({ success: false, msg: "Something went wrong" });
+//       }
+//       console.log(order);
+//       resolve(order);
+//     });
+//   });
+// };
 
 
 
 
 
 //rendering the placeorder
-exports.loadPlaceOrder = async (req, res,next) => {
+exports.loadPlaceOrder = async (req, res, next) => {
   try {
     res.render("placeOrder");
   } catch (error) {
     console.log(error);
-    next(error)
+    next(error);
   }
 };
 
 //delivery
-exports.Delivery = async (req, res,next) => {
+exports.Delivery = async (req, res, next) => {
   try {
     res.render("Delivery");
   } catch (error) {
     console.log(error);
-    next(error)
+    next(error);
   }
 };
 
 //post for place order
 exports.orderPlace = async (req, res) => {
   try {
+
     const user = req.session.userId;
     // console.log(user);
+    const method = req.body;
+    console.log(method);
     const address = req.session.addressId;
-    // console.log("address" + address);
-    const payment = req.body.payment;
-    console.log(payment);
     const selectedAddress = await Address.findOne(
       { user },
       { address: { $elemMatch: { _id: address } } }
@@ -99,9 +92,9 @@ exports.orderPlace = async (req, res) => {
         { upsert: true }
       );
     }
-    
+
     // console.log(selectAddress);
-    if (payment === "cash") {
+    if (method.payment === "cash") {
       console.log("cash called..");
       // const orderTopush = []
       for (let i = 0; i < cart.length; i++) {
@@ -114,90 +107,139 @@ exports.orderPlace = async (req, res) => {
           orderStatus: 1,
           orderDate: new Date(),
         };
-        
+
         await Order.updateOne({ user }, { $push: { orders: order } });
         console.log("Order pushed...");
       }
-      await Cart.updateOne({ user }, {$set:{product:[]}});
+      await Cart.updateOne({ user }, { $set: { product: [] } });
       // res.redirect("/Delivery");
-      res.json({cod:true})
-    }
-    else if(payment === 'online'){
-      console.log(total)
-      let orderDetails = await generateRazorpay("sdsdssd",total)
-      let order = await Cart.updateOne({ user }, {$set:{product:[]}});
-      console.log(orderDetails);
-      res.json({online:1,order:orderDetails})
-        // res.redirect("/Delivery");
-    }
-    
+      res.json({ status:'CASH' });
+    } else if (method.payment === "online") {
+        const cartData = await Cart.findOne({user}).populate('product.product_id')
+        // console.log(cartData);
+        const total = cartData?.product.reduce((acc,item)=>{
+            const totalItem = item.price * item.count;
+            return acc + totalItem
+        },0)
+        var options = {
+            amount: total * 100, // amount in the smallest currency unit
+            currency: "INR",
+            receipt: " ",
+        };
+        instance.orders.create(options,(err,order)=>{
+            if(err){
+                console.log(err);
+            }else{
+                console.log(cart)
+                res.json({status:'ONLINE',order: cart,order})
+            }
+        })
 
+    //   console.log(total);
+    //   let orderDetails = await generateRazorpay("sdsdssd", total);
+    //   let order = await Cart.updateOne({ user }, { $set: { product: [] } });
+    //   console.log(orderDetails);
+    //   res.json({ online: 1, order: orderDetails });
+      // res.redirect("/Delivery");
+    }
 
-  //   //reducing the stock
-  //   let product ='',count =0
-  //   for(let i=0;i<cart.product.length;i++){
-  //     product = ((cart.product[i].product_id).toString())
-  //     count = cart.product[i].count
-  //     await Product.findByIdAndUpdate({_id:product},{$inc:{stock:-count}})
-  //   }
+    //   //reducing the stock
+    //   let product ='',count =0
+    //   for(let i=0;i<cart.product.length;i++){
+    //     product = ((cart.product[i].product_id).toString())
+    //     count = cart.product[i].count
+    //     await Product.findByIdAndUpdate({_id:product},{$inc:{stock:-count}})
+    //   }
   } catch (error) {
     console.log(error);
   }
-
 };
 
 
 
-//order placed for online 
-exports.paymentMethod = async(req,res)=>{
-  try {
-    
-  } catch (error) {
-    console.log(error.message);
-  }
+//verify payment for razorpay
+exports.verifyPayment = async (req,res)=>{
+    try {
+        const userId = req.session.userId;
+        const user = await User.findOne({_id:userId})
+        const payment = req.body.payment
+
+        //order details from razorpay
+        const order = req.body.order
+        //user cart array for confirm order
+        // const cart = req.body.cart
+        const cartData = await Cart.findOne({ user:userId });
+        console.log("cart",cartData);
+        const cart = cartData.product;
+        
+        //taking address from the session
+        const address = req.session.addressId;
+        const selectedAddress = await Address.findOne(
+          { user },
+          { address: { $elemMatch: { _id: address } } }
+        );
+        
+        //verifying payment is confirmed or not
+        let hmac = crypto.createHmac('sha256',RAZORPAY_SECRET_KEY);
+        hmac.update(payment.razorpay_order_id + '|' + payment.razorpay_payment_id)
+        hmac = hmac.digest('hex')
+
+        if(hmac == payment.razorpay_signature){
+            for (let i = 0; i < cart.length; i++) {
+                let order = {
+                  product_id: cart[i].product_id,
+                  count: cart[i].count,
+                  price: cart[i].price * cart[i].count,
+                  address: selectedAddress.address[0],
+                  payment: "Online",
+                  orderStatus: 1,
+                  orderDate: new Date(),
+                };
+        
+                await Order.updateOne({ user }, { $push: { orders: order } });
+                console.log("Order pushed...");
+              }
+              await Cart.updateOne({ user }, { $set: { product: [] } });
+              res.json({paymentSuccess:true})
+        }else{
+            res.json({paymentSuccess:false})
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
+//order placed for online
+// exports.paymentMethod = async (req, res) => {
+//   try {
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
 
 //cancel order
-exports.cancelOrder  = async (req,res,next)=>{
-try{
-  const user = req.session.userId;
-  const orderId = req.query._id;
-  console.log(orderId);
+exports.cancelOrder = async (req, res, next) => {
+  try {
+    const user = req.session.userId;
+    const orderId = req.query._id;
+    console.log(orderId);
 
-  await Order.updateOne(
-    { user, 'orders._id': orderId },
-    {
-      $set: {
-        'orders.$.orderStatus': 5,
-        'orders.$.orderDate': new Date()
+    await Order.updateOne(
+      { user, "orders._id": orderId },
+      {
+        $set: {
+          "orders.$.orderStatus": 5,
+          "orders.$.orderDate": new Date(),
+        },
       }
-    }
-  );
+    );
 
-  res.redirect("/orders&returns");
-}catch(error){
-console.log(error);
-next(error)
-}
-}
-
-
-
-
-
-
+    res.redirect("/orders&returns");
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 
 //admin controller
 exports.orderLoad = async (req, res) => {
@@ -220,7 +262,7 @@ exports.orderLoad = async (req, res) => {
 };
 
 //shipping order status
-exports.changeOrder = async (req, res,next) => {
+exports.changeOrder = async (req, res, next) => {
   try {
     const order = req.query.id;
     const Action = parseInt(req.query.action);
@@ -248,70 +290,71 @@ exports.changeOrder = async (req, res,next) => {
     res.redirect("/admin/orders");
   } catch (error) {
     console.log(error);
-    next(error)
+    next(error);
   }
 };
 
 //view details
-exports.viewDetails = async (req, res,next) => {
-
-
-  // const id = req.query.id;
-  // console.log(id);
-  
-  // try {
-  //   const order = await Order.findOne({ 'orders._id': id });
-  
-  //   if (!order) {
-  //     return res.status(404).json({ message: 'Order not found' });
-  //   }
-  
-  //   // Now, you can access the specific order within the "orders" array
-  //   const foundOrder = order.orders.find(orderItem => orderItem._id.toString() === id);
-  
-  //   if (!foundOrder) {
-  //     return res.status(404).json({ message: 'Order item not found' });
-  //   }
-  
-  //   // Send the found order data as a JSON response
-  //   res.status(200).json(foundOrder);
-  // } catch (err) {
-  //   console.error(err);
-  //   res.status(500).json({ error: 'Internal Server Error' });
-  // }
+exports.viewDetails = async (req, res, next) => {
   
 
   try {
-    
     const id = req.query.id;
     console.log(id);
-    const order = await Order.findOne({'orders._id':id}).populate('orders.product_id')
-    
-    const orderFound = order.orders.find(orderItem =>orderItem._id.toString()===id)
-    console.log("orderfound",orderFound);
-  
+    const order = await Order.findOne({ "orders._id": id }).populate(
+      "orders.product_id"
+    );
+
+    const orderFound = order.orders.find(
+      (orderItem) => orderItem._id.toString() === id
+    );
+    console.log("orderfound", orderFound);
+
     res.render("admin/viewDetails", { orderFound });
     // console.log(selectedOrder);
   } catch (error) {
     console.log(error);
-    next(error)
+    next(error);
   }
- };
+};
 
 //orders and returns
-exports.ordersAndReturns = async (req,res,next)=>{
+exports.ordersAndReturns = async (req, res, next) => {
   try {
     const user = req.session.userId;
     console.log(user);
-    
-    let orderData = await Order.findOne({user}).populate('orders.product_id')
-    orderData = orderData?.orders.reverse()
+
+    let orderData = await Order.findOne({ user }).populate("orders.product_id");
+    orderData = orderData?.orders.reverse();
     console.log(orderData);
-    res.render('orders&returns',{orderData})
+    res.render("orders&returns", { orderData });
   } catch (error) {
     console.log(error);
-    next(error)
+    next(error);
   }
-}
+};
 
-//orer
+//view order details in user side
+
+exports.viewDetailsUser = async (req, res, next) => {
+  
+
+    try {
+      const id = req.query.id;
+      console.log(id);
+      const order = await Order.findOne({ "orders._id": id }).populate(
+        "orders.product_id"
+      );
+  
+      const orderFound = order.orders.find(
+        (orderItem) => orderItem._id.toString() === id
+      );
+      console.log("orderfound", orderFound);
+  
+      res.render("orderDetails", { orderFound });
+      // console.log(selectedOrder);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };

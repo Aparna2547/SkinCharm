@@ -1,0 +1,67 @@
+<%- include('./head.ejs') %>
+    <%- include('./header.ejs') %>
+
+
+        <main style="min-height: 90vh;" class="container  d-flex justify-content-center align-items-center">
+            <section class="w-100">
+                <div class="table-data mb-3">
+                    <div class="order bg-gradient">
+                        <div class="p-3 d-flex" style="border: 2px solid grey;">
+                            <% if (orderFound) { %>
+
+                                <div style="width: 5rem">
+                                    <img src="/images/<%= orderFound.product_id.image[0].filename %>" alt=""
+                                        class="img-fluid">
+                                </div>
+                                <div class="mx-5">
+                                    <p class="fw-bold mb-0">
+                                        <%= orderFound.product_id.productname %>
+                                    </p>
+                                    <p class="fw-bold mb-0">Quantity: <%= orderFound.count %>
+                                    </p>
+                                    <p class="fw-bold mb-0">Price: ₹<%= orderFound.count * orderFound.price %>
+                                    </p>
+                                    <p class="fw-bold mb-0">Status: <%= orderFound.orderStatus %>
+                                    </p>
+                                </div>
+
+                                <% } else { %>
+                                    <p>No items found in the order.</p>
+                                    <% } %>
+                        </div>
+
+                    </div>
+                </div>
+                </div>
+
+                <div class="table-data mt-0">
+                    <div class="order bg-gradient">
+                        <div class="p-3" style="border: 2px solid grey;">
+                            <h6>Delivery Address</h6>
+                            <% if(orderFound){ %>
+
+                                <div class="mx-0">
+                                    <p class="fw-bold mb-0">
+                                        <%=orderFound.address.name %>
+                                    </p>
+                                    <p class="mb-0">
+                                        <%=orderFound.address.address%>,<%=orderFound.address.locality%>,
+                                                <%=orderFound.address.city%>,<%=orderFound.address.state%>-
+                                                        <%=orderFound.address.pincode%>
+                                    </p>
+                                    <p class="fw-bold mb-0">
+                                        <%=orderFound.address.phone%>
+                                    </p>
+                                </div>
+                                <% } %>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- </main> -->
+                <!-- MAIN -->
+            </section>
+        </main>
+
+        <%- include('./footer.ejs') %>

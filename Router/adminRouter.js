@@ -77,14 +77,14 @@ adminRoute.get('/listproduct',productController.listProduct)
 adminRoute.get('/orders',adminauth.isadminLogin,orderController.orderLoad)
 
 //shipping status
-adminRoute.get('/changeOrderStatus',orderController.changeOrder)
+adminRoute.get('/changeOrderStatus',adminauth.isadminLogin,orderController.changeOrder)
 
 //view details
-adminRoute.get('/viewDetails',orderController.viewDetails)
+adminRoute.get('/viewDetails',adminauth.isadminLogin,orderController.viewDetails)
 
 //logout
 adminRoute.get('/adminLogout',adminController.adminLogout)
-adminRoute.post('/adminLogout',nocache(),adminController.adminLogout)
+// adminRoute.post('/adminLogout',nocache(),adminController.adminLogout)
 
 
 module.exports = adminRoute

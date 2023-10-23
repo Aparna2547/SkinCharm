@@ -6,7 +6,7 @@
 
 
             <!-- Shopping Cart Section Begin -->
-            <section class="shopping-cart spad">
+            <section class="shopping-cart spad" style="min-height: 100vh;">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-8">
@@ -24,9 +24,9 @@
                                     </form> -->
                                     
                                      <form  id="checkoutForm">
-                                        <input type="radio" id="cod"  <%=  'checked'  %> name="payment" value="cash">
+                                        <input type="radio" data-pay-type="cash" id="cod"  <%=  'checked'  %> name="payment" value="cash">
                                         <label for="cod" class="fw-bold">Cash on Delivery</label><br>
-                                        <input type="radio" id="onp" name="payment" value="online">
+                                        <input type="radio" data-pay-type="online" id="onp" name="payment" value="online">
                                         <label for="onp"  class="fw-bold">Online payment</label><br>
                                         <button type="submit" class="btn w-100 fw-bold text-white ls mt-3" style="background-color:#c70261;">PLACE ORDER</button>
                                         
@@ -50,46 +50,11 @@
             </section>
 
               
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-            <script>
-                $('#checkoutForm').submit((e)=>{
-                    e.preventDefault()
-                    $.ajax({
-                        url:"/checkOut",
-                        method:'post',
-                        data:$("#checkoutForm").serialize(),
-                     success:function(res){
-                        if(res.success){
-                            var options = {
-                                "key":"" + res.key_id + "",
-                                "amount" : "" + res.total+"",
-                                "currency" : "INR",
-                                "order_id" :"" +res.order_id +"",
-                                "handler" : function (response){
-                                    alert("payment sucessful")
-                                }
-                              
-
-                            };
-                            var razorpayObject = new Razorpay(options);
-                            razorpayObject.on('payment-failed',function(response){
-                                alert('payment failed')
-                            })
-                            razorpayObject.open();
-                        }
-                        else{
-                            alert(req.msg)
-                        }
-                     }
-                    })
-                })
-
-                function payPayment(order,user,OrderId){
-
-                }
-            </script>
+        
+            
             <!-- Shopping Cart Section End -->
             <%- include('./footer.ejs') %>
+
 
                 <% }catch(error) { %>
                     <p>An error occurred: <%= error.message %>

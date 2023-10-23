@@ -172,11 +172,17 @@ try {
   // const productId =req.query.productId;
   // console.log("productId",productId);
   const wishlist = await Wishlist.findOne({user})
-  console.log(wishlist);
+  // console.log(wishlist);
   const category =await Category.find({isListed:true})
+  console.log(category);
+  
+  // if (category.length > 0) {
+  //   var brand = category[0].brands;
+  //   console.log(brand);
+  // }
   const products = await Product.find({isListed:true})
   
-  res.render('shop',{products,category,wishlist})
+  res.render('shop',{products,category,wishlist,brands: category[0].brands})
 } catch (error) {
   console.log(error);
   next(error)
