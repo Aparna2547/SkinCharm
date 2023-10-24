@@ -11,14 +11,9 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="shop__sidebar ">
-                            <!-- <div class="shop__sidebar__search">
-                        <form action="#">
-                            <input type="text" placeholder="Search...">
-                            <button type="submit"><span class="icon_search"></span></button>
-                        </form>
-                    </div> -->
+                         
                             <div class="shop__sidebar__accordion mt-5">
-                                <div class="accordion bg-white p-3" id="accordionExample">
+                                <form class="accordion bg-white p-3" id="accordionExample">
                                     <div class="card">
                                         <div class="card-heading">
                                             <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
@@ -29,10 +24,10 @@
                                                 <div class="row">
                                                     <%category.forEach(cat=>{ %>
                                                         <div class="col-md-12 d-flex align-items-center">
-                                                            <input type="checkbox" name="<%=cat.category%>" id="<%=cat.category%>">
-                                                            <h5 class="fs-7 ms-1">
+                                                            <input type="checkbox" <%= categoryToFront.includes(cat.category) && 'checked'%> name="category" value="<%=cat.category%>">
+                                                            <p class="fs-7 ms-1 fw-bold " style="text-transform: capitalize;">
                                                                 <%= cat.category %>
-                                                            </h5>
+                                                            </p>
                                                         </div>
                                                     <%})%>
                                                 </div>
@@ -48,22 +43,19 @@
                                         <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
                                             <div class="container">
                                                 <div class="row">
-                                                
-                                                    <% brands.forEach((brand) => { %>
-                                                        <li><%= brand %></li>
-                                                    <% }); %>
+
+                                                    <%brands.forEach(brand=>{ %>
+                                                        <div class="col-md-12 d-flex align-items-center">
+                                                            <input <%=brandsToFront.includes(brand) && 'checked'  %> type="checkbox" name="brand" value="<%=brand%>">
+                                                            <p class="fs-7 ms-1 fw-bold" style="text-transform: capitalize;">
+                                                                <%=brand %>
+                                                            </p>
+                                                        </div>
+                                                    <%})%>
+                                                  
                                                 </div>
                                             </div>
-                                            <div class="card-body">
-                                                <div class="shop__sidebar   __brand">
-                                                    <!-- <ul>
-                                                <li><a href="#">Louis Vuitton</a></li>
-                                                <li><a href="#">Chanel</a></li>
-                                                <li><a href="#">Hermes</a></li>
-                                                <li><a href="#">Gucci</a></li>
-                                            </ul> -->
-                                                </div>
-                                            </div>
+                                       
                                         </div>
                                     </div>
                                     <div class="card">
@@ -71,16 +63,14 @@
                                             <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
                                         </div>
                                         <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
-                                            <div class="card-body">
-                                                <div class="shop__sidebar__price">
-
-                                                </div>
-                                            </div>
+                                           <p>hai</p>
                                         </div>
                                     </div>
-
-                                    <!--          -->
+                                    <input type="hidden" value="<%= search %>" name="search" hidden>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                    <button class="btn text-white ls fw-bold w-100" style="background-color: #c70261;">FILTER</button>
                                 </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -104,7 +94,20 @@
                         </div> -->
                             </div>
                         </div>
+                        <div class="d-flex justify-content-end mb-2">
+                            <div class="dropdown">
+                                <button class="btn btn-light border border-2 dropdown-toggle w-100 d-flex align-items-center" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                 Sorted by : <p class="fw-bold ms-1"><%if(sortToFront == 1){ %> Price: Low To High <% }else if(sortToFront==-1){%>Price: High To Low <%}else{ %>Newest First <% } %></p>
+
+                                </button>
+                                <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
+                                  <li><a class="dropdown-item page-item" data-sort-by="1" href="#">Price: Low To High</a></li>
+                                  <li><a class="dropdown-item page-item" data-sort-by="-1" href="#">Price: High To Low</a></li>
+                                </ul>
+                              </div>
+                        </div>
                         <div class="row">
+                            
                             <% products.forEach((product)=>{ %>
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     <div class="product__item p-2" style="background-color: white;min-height: 22rem;">
@@ -136,10 +139,18 @@
                                 </div>
                                 <% }) %>
                         </div>
-
+                        <div>
+                            <ul class="d-flex justify-content-center align-items-center">
+                             <li class="p-2 border border-2" <% if(page<=1){ %>style="pointer-events: none;"<%} %> ><a href="#"  data-page-no=<%=page-1%> class="page-item text-dark fw-bold"><</a></li>
+                             <li class="p-2 border border-2"><a href="#" data-page-no=<%= page %> class="page-item text-dark fw-bold"><%=page%></a></li>
+                             <li class="p-2 border border-2" <% if(page>=totalPages){ %>style="pointer-events: none;"<%} %>><a href="#" data-page-no=<%= parseInt(page)+1%> class="page-item text-dark fw-bold">></a></li>
+             
+                            </ul>
+                         </div>
                     </div>
                 </div>
             </div>
+          
         </section>
         <!-- Shop Section End -->
 
