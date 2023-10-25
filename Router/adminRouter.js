@@ -25,6 +25,14 @@ adminRoute.get('/',nocache(),adminauth.isadminLogout,adminController.loadLogin)
 adminRoute.get('/home',adminauth.isadminLogin,adminController.LoadHome)
 adminRoute.post('/home',adminController.Login)
 
+//salesReport-GET
+// adminRoute.get('/salesReport',adminauth.isadminLogin,adminController.salesReportLoad)
+
+//salesReport post 
+adminRoute.post('/salesReport',adminauth.isadminLogin,adminController.salesReport)
+
+
+
 //user page
 adminRoute.get('/user',adminController.loadUser)
 

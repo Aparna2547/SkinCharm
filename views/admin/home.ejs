@@ -4,14 +4,14 @@
 
 	<!-- SIDEBAR -->
 	<section id="sidebar">
-		<a href="#" class="brand">
+		<!-- <a href="#" class="brand"> -->
 			<img src="/admin/assets/logo.png" style="width:5rem;height:5rem;margin-top: 20%;margin-left: 10%; border-radius: 50%;" alt="...">
 
 		</a>
 		<ul class="side-menu top">
             <li class="active">
                 <a href="/admin/home" class="text-decoration-none">
-            <i class='bx bxs-dashboard'></i>
+            <!-- <i class='bx bxs-dashboard me-0'></i> --><i class="fa fa-dashboard ms-1"></i>&nbsp;
             <span class="text">Dashboard</span>
                 </a>
             </li>
@@ -72,8 +72,7 @@
 			<i class='bx bx-menu' ></i>
 			<form action="#">
 				<div class="form-input">
-					<!-- <input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button> -->
+					
 				</div>
 			</form>
 			
@@ -82,107 +81,72 @@
 
 		<!-- MAIN -->
 		<main>
-			<!-- <div class="head-title">
-				<div class="left">
-					<h1>Dashboard</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a href="/admin/home">Dashboard</a>
-						</li>
-						<li><i class='bx bx-chevron-right' ></i></li>
-						<li>
-							<a class="active" href="/admin/home">Home</a>
-						</li>
-					</ul>
+			<div class="border border-3 p-2">
+				<h3>ADMIN DASHBOARD</h3>
+			</div>
+			<div class="d-block border border-3 p-2 mt-4" style="background-color: rgb(25, 50, 190);">
+				<h5 class="text-white">ORDER DETAILS</h5>
+			</div>
+			<div class="d-block border border-3 p-2 mt-4"> 
+			<div class="d-flex">
+				<div class="border border-3 p-2 m-4 w-25">
+					<p class="text-center fw-bold">Total</p>
+					<p class="text-center fw-bold"><%= totalOrders %></p>
 				</div>
-				
-			</div> -->
-
-			<ul class="box-info">
-				<li>
-					<i class='bx bxs-calendar-check' ></i>
-					<span class="text">
-						<h3>1020</h3>
-						<p>New Order</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-group' ></i>
-					<span class="text">
-						<h3>2834</h3>
-						<p>Visitors</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-dollar-circle' ></i>
-					<span class="text">
-						<h3>$2543</h3>
-						<p>Total Sales</p>
-					</span>
-				</li>
-			</ul>
-
-
-			<div class="table-data">
-				<div class="order">
-					<div class="head">
-						<h3>Recent Orders</h3>
-						<i class='bx bx-search' ></i>
-					</div>
-					<table>
-						<thead>
-							<tr>
-								<th>User</th>
-								<th>Date Order</th>
-								<th>Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<img src="img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status completed">Completed</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status pending">Pending</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status process">Process</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status pending">Pending</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status completed">Completed</span></td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="border border-3 p-2 m-4 w-25">
+					<p class="text-center fw-bold">Delivered</p>
+					<p class="text-center fw-bold"><%= deliveredProduct %></p>
 				</div>
+				<div class="border border-3 p-2 m-4 w-25">
+					<p class="text-center fw-bold">Cancelled</p>
+					<p class="text-center fw-bold"><%= cancelledProduct %></p>
 				</div>
 			</div>
+		</div>
+			<div class="d-block border border-3 p-2 mt-4" style="background-color: rgb(25, 50, 190);">
+				<h5 class="text-white">USER DETAILS</h5>
+			</div>
+			<div class="d-block border border-3 p-2 mt-4">
+			<div class="d-flex">
+				<div class="border border-3 p-2 m-4 w-25">
+					<p class="text-center fw-bold">Total</p>
+					<p class="text-center fw-bold"><%= totalUser %></p>
+				</div>
+				<div class="border border-3 p-2 m-4 w-25">
+					<p class="text-center fw-bold">Recent</p>
+					<p class="text-center fw-bold"><%= recentUser %></p>
+				</div>
+				<div class="border border-3 p-2 m-4 w-25">
+					<p class="text-center fw-bold">Blocked</p>
+					<p class="text-center fw-bold"><%= blockedUser %></p>
+				</div>
+			</div>
+		</div>
+			<div class="d-block border border-3 p-2 mt-4" style="background-color: rgb(25, 50, 190);">
+				<h5 class="text-white">REVENUE DETAILS</h5>
+			</div>
+			<div class="d-block border border-5 p-2 mt-4">
+			<div class="d-flex">
+				<div class="border border-3 p-2 m-4 w-25">
+					<p class="text-center fw-bold">Total</p>
+					<p class="text-center fw-bold">₹ <%= finalProfit %></p>
+				</div>
+			</div>
+		</div>
+		<div class="border border-3 p-2 m-4 d-flex w-75">
+			<h6>Sales Report</h6>
+			<form action="/admin/salesReport" id="salesReport" method="post">
+			<div class="">
+				Start Date:<br>
+				<input type="date" name="startDate" class="form-control">
+				</div>
+				<div class=" ">
+					End Date:<br>
+					<input type="date" name="endDate" class="form-control">
+					</div>
+					<button type="submit" class="btn btn primary">Filter reports</button>
+				</form>
+		</div>
 		</main>
 		<!-- MAIN -->
 	</section>

@@ -1,0 +1,48 @@
+<%- include("../admin/header.ejs") %>
+
+<section class="container-fluid">
+    <div class="justify-content-center align-items-center m-3">
+        <h1>SALES REPORT</h1>
+        <p class="p-0">From <%= startDate %> To <%= endDate %></p>
+    </div>
+    <div class="container-fluid">
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">OrderDate</th>
+                <th scope="col">user</th>
+                <th scope="col">OrderId</th>
+                <th scope="col">Category</th>
+                <th scope="col">Payment Method</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% sales.forEach((sale)=>{ %> 
+              <tr>
+                <th scope="row">1</th>
+                <td><%= sale.orderDate %></td>
+                <td><%= sale.username %></td>
+                <td><%= sale.orderId %></td>
+                <td><%= sale.category %></td>
+                <td><%= sale.payment %></td>
+                <td><%= sale.price %></td>
+              </tr>
+              <%}) %>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td colspan="2">Larry the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+</section>
+<%- include("../admin/footerpage.ejs") %>
