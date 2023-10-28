@@ -155,95 +155,68 @@ exports.LoadHome = async (req, res) => {
 //   }
 // }
 
+
+
+
+
 //salesREPORT
 exports.salesReport = async (req, res) => {
-    try {
+   try {
+    let startDate = req.body.startDate
+    let startDateISO = new Date(startDate)
+    let endDate = req.body.endDate
+    let endDateISO = new Date(endDate)
+    console.log(startDate,startDateISO);
 
-        //sales report
-        let startDate = req.body.startDate;
-        let endDate = req.body.endDate;
-        console.log(startDate);
-        console.log(endDate);
-        const sales = await Order.aggregate([
-            {
-              $unwind: "$orders" // Unwind the 'orders' array
-            },
-            {
-              $match: {
-                "orders.orderStatus": 4,
-                "orders.orderDate": {
-                  $gte: startDate,
-                  $lte: endDate
-                }
-              }
+  
+  const sales = await Order.aggregate([
+    {
+        $match: {
+            "orders.orderStatus": 4,
+            "orders.orderDate": {
+                $gte: startDateISO,
+                $lte: endDateISO
             }
-            // {
-            //     $lookup: {
-            //         from: "User", // Replace with the actual name of the user collection
-            //         localField: "user",
-            //         foreignField: "_id",
-            //         as: "userDetails"
-            //     }
-            // },
-            // {
-            //     $addFields: {
-            //         paymentMethod: "$orders.paymentMethod",
-            //         userName: { $arrayElemAt: ["$userDetails.name", 0] },
-            //         amount: { $add: ["$orders.price", "$orders.walletUsed"] },
-            //         date: "$orders.orderDate",
-            //         category: "$orders.category"
-            //     }
-            // },
-            // {
-            //     $project: {
-            //         _id: "$_id", // Use the main document's _id as orderId
-            //         paymentMethod: 1,
-            //         userName: 1,
-            //         amount: 1,
-            //         date: 1,
-            //         category: 1
-            //     }
-            // }
-        ]);
-        if (sales.length === 0) {
-            console.log("No matching orders found.");
-          } else {
-            console.log("Sales data:", sales);
-          }
+        }
+    },
+    {
+        $unwind: "$orders"
+    },
+    {
+        $lookup: {
+            from: "users", // Replace with the actual name of the user collection
+            localField: "user",
+            foreignField: "_id",
+            as: "userDetails"
+        }
+    },
+    {
+        $addFields: {
+            paymentMethod: "$orders.payment",
+            userName: { $arrayElemAt: ["$userDetails.username", 0] },
+            amount: { $multiply: ["$orders.price", "$orders.count"] },
+            date: "$orders.orderDate",
+            // category: "$orders.category"
+        }
+    },
+    {
+        $project: {
+            _id: "$_id", // Use the main document's _id as orderId
+            paymentMethod: 1,
+            userName: 1,
+            amount: 1,
+            date: 1,
+            // category: 1
+        }
+    }
+]);    
+  console.log(sales);
 
         res.render('admin/salesReport', { sales, startDate, endDate })
     } catch (error) {
         next(error)
     }
 
-//   try {
-//     let startDate = req.body.startDate;
-//     let endDate = req.body.endDate;
-//     console.log(startDate, endDate);
-//     // const sales = await Order.aggregate([
-//     //   { $unwind: "$orders" },
-//     //   {
-//     //     $match: {
-//     //       "orders.orderStatus": { $in: [2, 3, 4] },
-//     //       "orders.orderDate": {
-//     //         $gte: "2023-10-19T14:12:22.624+00:00",
-//     //         $lte: "2023-10-24T05:03:17.935+00:00",
-//     //       },
-//     //     },
-//     //   },
-//     // ]);
-    
-
-//     if (sales.length === 0) {
-//       console.log("No sales found within the specified date range.");
-//     } else {
-//       console.log("Sales:", sales);
-//     }
-
-//     res.render("admin/salesReport");
-//   } catch (error) {
-//     console.error("Error:", error);
-//   }
 };
 
 //login page -POST admin side

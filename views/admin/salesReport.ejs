@@ -1,48 +1,61 @@
 <%- include("../admin/header.ejs") %>
 
 <section class="container-fluid">
-    <div class="justify-content-center align-items-center m-3">
+    <div class="m-3">
         <h1>SALES REPORT</h1>
-        <p class="p-0">From <%= startDate %> To <%= endDate %></p>
+      <div class="d-flex justify-content-between align-items-end">
+        <%const date1 = new Date(startDate);%>
+        <%const options1 = { month: 'short', day: 'numeric', year: 'numeric' };
+        const startingDate = date1.toLocaleDateString('en-US', options1); %> 
+        
+        <%const date2 = new Date(endDate);%>
+        <%const options2 = { month: 'short', day: 'numeric', year: 'numeric' };
+        const endingDate = date2.toLocaleDateString('en-US', options2); %> 
+
+        <h5 class="p-0 fw-bold">From: <%= startingDate %>  To: <%= endingDate %></h5>
+        <button class="btn btn-secondary" id="printButton">Print Report</button>
+      </div>
+
     </div>
     <div class="container-fluid">
         <table class="table table-bordered">
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">OrderDate</th>
-                <th scope="col">user</th>
+                <th scope="col">Date</th>
+                <th scope="col">Name</th>
                 <th scope="col">OrderId</th>
-                <th scope="col">Category</th>
                 <th scope="col">Payment Method</th>
                 <th scope="col">Amount</th>
               </tr>
             </thead>
             <tbody>
-                <% sales.forEach((sale)=>{ %> 
+                <% sales.forEach((sale,index)=>{ %>
+                  <%const date = new Date(sale.date);%>
+                  <%const options = { month: 'short', day: 'numeric', year: 'numeric' };
+                  const formattedDate = date.toLocaleDateString('en-US', options); %> 
               <tr>
-                <th scope="row">1</th>
-                <td><%= sale.orderDate %></td>
-                <td><%= sale.username %></td>
-                <td><%= sale.orderId %></td>
-                <td><%= sale.category %></td>
-                <td><%= sale.payment %></td>
-                <td><%= sale.price %></td>
+                <td><%= index + 1 %></td>
+                <td><%= formattedDate %></td>
+                <td><%= sale.userName %></td>
+                <td>ORD<%= sale._id %></td>
+                <td><%= sale.paymentMethod %></td>
+                <td>₹<%= sale.amount %></td>
               </tr>
               <%}) %>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-              </tr>
+             
             </tbody>
           </table>
     </div>
 </section>
+<script>
+  // Get the print button element
+  const printButton = document.getElementById('printButton');
+
+  // Add a click event listener to the print button
+  printButton.addEventListener('click', () => {
+  // Call the browser's print function
+  window.print();
+  });
+</script>
 <%- include("../admin/footerpage.ejs") %>

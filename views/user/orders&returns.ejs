@@ -1,31 +1,31 @@
-<%- include("./head.ejs") -%>
+b<%- include("./head.ejs") -%>
 <%- include("./header.ejs") -%>
 
 <section>
 <%-  include("./profilebar.ejs")-%>
-<h5 class="card-title fw-bold mb-5">ORDERS</h5>
+<h5 class="card-title fw-bold mb-2">ORDERS</h5>
 
 <% if(orderData && orderData.length) {%>
     <% orderData.forEach((order)=>{ %>
+        <% order.orders.forEach((item)=>{ %>
             <div class="card mt-2">
                 <div class="card-body d-flex">
                    
                     <div class="product__cart__item__pic" style="width: 6rem;">
-                        <!-- <a href="/admin/viewDetails?id=<%order._id%>"> -->
-                        <img src="/images/<%=order.product_id.image[0].filename %>" class="img-fluid" alt="">
+                        <img src="/images/<%=item.product_id.image[0].filename %>" class="img-fluid" alt="">
                        </div>
                     <!-- </a> -->
                        <div class="d-block mx-5">
-                    <p class="card-text"><b><%= order.product_id.productname %></b> </p>
-                    <p class="card-text"><b><%= order.product_id.category %></b> </p>
-                    <p class="card-text"><b>Quantity:  <%= order.count %></b> </p>
-                    <p class="card-text">  <b>₹  <%= order.price %></b> </p>
-                    <%const date = new Date(order.orderDate);%>
+                    <p class="card-text"><b><%= item.product_id.productname %></b> </p>
+                    <p class="card-text"><b><%= item.product_id.category.toString() %></b> </p>
+                    <p class="card-text"><b>Quantity:  <%= item.count %></b> </p>
+                    <p class="card-text">  <b>₹  <%= item.price %></b> </p>
+                    <%const date = new Date(item.orderDate);%>
                     <%const options = { month: 'short', day: 'numeric', year: 'numeric' };
                     const formattedDate = date.toLocaleDateString('en-US', options); %>
                     <% 
                     var status
-                        switch (order.orderStatus) {
+                        switch (item.orderStatus) {
                             case 1:
                                 status = "Confirmed"
                                 break;
@@ -47,15 +47,15 @@
                                 break;
                         }
                     %>
-                    <p class="card-text">  <b>Status:  <%= status %> on <%=formattedDate  %></b> </p><br>
+                    <p class="card-text <%=item.orderStatus >4 && 'text-danger'  %>">  <b>Status:  <%= status %> on <%=formattedDate  %></b> </p><br>
+                
 
                     
-                    <!-- <a href="/cancelOrder?_id=<%= order._id %>&productId=<%= order.productId %>" class="btn fw-bold text-white" <% if (order.orderStatus >= 2) { %>hidden<% } %> style="background-color:#c0130a;">CANCEL</a> -->
-                    <a href="/cancelOrder?_id=<%= order._id %>&productId=><%= order.productId %>" class="btn fw-bold text-white" <% if(order.orderStatus >=2){%> hidden <% } %> style="background-color:#c0130a;"
-                        data-toggle="modal" data-target = "#confirmCancelModal"
-                        > CANCEL</a>
+                    <button class="btn fw-bold text-white" <% if(item.orderStatus >=2){%> hidden <% } %> style="background-color:#c0130a;"
+                        data-toggle="modal" data-target = "#confirmCancelModal-<%=item._id%>"
+                        > CANCEL</button>
  <!-- Modal -->
- <div class="modal fade" id="confirmCancelModal" tabindex="-1" role="dialog"
+ <div class="modal fade" id="confirmCancelModal-<%=item._id%>" tabindex="-1" role="dialog"
  aria-labelledby="confirmationModalLabel" aria-hidden="true">
  <div class="modal-dialog" role="document">
      <div class="modal-content">
@@ -76,12 +76,14 @@
              <button type="button" class="btn btn-secondary"
                  data-dismiss="modal">Close</button>
              <!-- Add your action button (Block/Unblock) here -->
-             <a href="/cancelOrder?_id=<%= order._id %>&productId=<%= order.productId %>" class="btn btn-danger">Cancel</a>
-         </div>
+            
+             <a href="/cancelOrder?_id=<%= item._id %>" class="btn btn-danger">Cancel</a>
+            
+            </div>
      </div>
  </div>
 </div>
-<a href="/orderDetails?id=<%=order._id%>" class="btn text-white fw-bold w-50 py-1.5">view Details</a>
+<a href="/orderDetails?id=<%=order._id%>" class="btn btn-secondary text-white fw-bold w-50 py-1.5">View Details</a>
 
 
 
@@ -89,7 +91,7 @@
                 </div>
                 </div>
         </div>
-        <%}) } %>
+        <%})}) } %>
                   </div>
         </div>
     </div>
