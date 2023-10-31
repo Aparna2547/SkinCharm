@@ -122,6 +122,7 @@ exports.orderPlace = async (req, res) => {
       count = 0;
       // let productId = cart.product_id;
       // console.log(productId)
+
     for (let i = 0; i < cart.product.length; i++) {
       product = cart.product[i].product_id.toString();
       count = cart.product[i].count;
@@ -161,6 +162,7 @@ exports.verifyPayment = async (req, res) => {
     hmac = hmac.digest("hex");
 
     if (hmac == payment.razorpay_signature) {
+      const orderTopush = []
       for (let i = 0; i < cart.length; i++) {
         let order = {
           product_id: cart[i].product_id,
@@ -171,8 +173,13 @@ exports.verifyPayment = async (req, res) => {
           orderStatus: 1,
           orderDate: new Date(),
         };
-
-        await Order.updateOne({ user }, { $push: { orders: order } });
+        orderTopush.push(order);
+        let newOrder = await new Order({
+          user,
+          orders:orderTopush
+        })
+        await newOrder.save();
+        // await Order.updateOne({ user }, { $push: { orders: order } });
         console.log("Order pushed...");
       }
       await Cart.updateOne({ user }, { $set: { product: [] } });
@@ -341,23 +348,56 @@ exports.ordersAndReturns = async (req, res, next) => {
 
 //view order details in user side
 
+// exports.viewDetailsUser = async (req, res, next) => {
+//   try {
+//     const id = req.query.id;
+//     console.log(id);
+//     const order = await Order.findOne({ "orders._id": id }).populate(
+//       "orders.product_id"
+//     );
+
+//     const orderFound = order.orders.find(
+//       (orderItem) => orderItem._id.toString() === id
+//     );
+//     console.log("orderfound", orderFound);
+
+//     res.render("orderDetails", { orderFound });
+//     // console.log(selectedOrder);
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//   }
+// };
 exports.viewDetailsUser = async (req, res, next) => {
   try {
+    const user = req.session.userId;
     const id = req.query.id;
-    console.log(id);
-    const order = await Order.findOne({ "orders._id": id }).populate(
-      "orders.product_id"
+    console.log("id of the order: " + id);
+
+    // Finding the specific order
+    const order = await Order.findOne(
+      {
+        user,
+        orders: { $elemMatch: { _id: id } }
+      },
+      { 'orders.$': 1 }
     );
+
+    if (!order) {
+      // Handle the case where the order with the specified ID is not found
+      return res.status(404).send("Order not found");
+    }
 
     const orderFound = order.orders.find(
       (orderItem) => orderItem._id.toString() === id
     );
     console.log("orderfound", orderFound);
 
+    // Render the response or perform any other necessary actions
     res.render("orderDetails", { orderFound });
-    // console.log(selectedOrder);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     next(error);
   }
 };
+

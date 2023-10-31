@@ -2,16 +2,17 @@
 
 
 
-    <!-- SIDEBAR -->
-    <section id="sidebar">
-        <a href="#" class="brand">
-            <img src="/admin/assets/logo.png" style="width:5rem;height:5rem;margin-top: 20%;margin-left: 10%; border-radius: 50%;" alt="...">
+   
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<!-- <a href="#" class="brand"> -->
+			<img src="/admin/assets/logo.png" style="width:5rem;height:5rem;margin-top: 20%;margin-left: 10%; border-radius: 50%;" alt="...">
 
-        </a>
-        <ul class="side-menu top">
+		</a>
+		<ul class="side-menu top">
             <li>
                 <a href="/admin/home" class="text-decoration-none">
-            <i class='bx bxs-dashboard'></i>
+            <!-- <i class='bx bxs-dashboard me-0'></i> --><i class="fa fa-dashboard ms-1"></i>&nbsp;
             <span class="text">Dashboard</span>
                 </a>
             </li>
@@ -27,42 +28,41 @@
                     <span class="text">Categories</span>
                 </a>
             </li>
-            <li class="active">
-                <a href="/admin/product"  class="text-decoration-none">
+            <li   class="active">
+                <a href="/admin/product" class="text-decoration-none">
                     <img src="/admin/assets/producticon.png" alt="product" style="width:1.3rem;">&nbsp;&nbsp;
                     <span class="text">Product</span>
                 </a>
             </li>
-            <li>
-                <a href="/admin/orders" class="text-decoration-none">
-                    <i class='bx bxs-message-dots'></i>
-                    <span class="text">Order</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="text-decoration-none">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Coupons</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Check out</span>
-                </a>
-            </li>
-        </ul>
-        <ul class="side-menu">
-            <li>
-                <a href="/admin/adminLogout" class="logout">
-                    <i class='bx bxs-log-out-circle'></i>
-                    <span class="text">Logout</span>
-                </a>
-            </li>
-        </ul>
-    </section>
-    <!-- SIDEBAR -->
-
+			<li>
+				<a href="/admin/orders" class="text-decoration-none">
+					<i class='bx bxs-message-dots' ></i>
+					<span class="text">Order</span>
+				</a>
+			</li>
+			<li>
+				<a href="#" class="text-decoration-none">
+					<i class='bx bxs-group' ></i>
+					<span class="text">Coupons</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-group' ></i>
+					<span class="text">Check out</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="side-menu">
+			<li>
+				<a href="/admin/adminLogout" class="logout btn text-white fw-bold ls w-75" style="border-radius:0; background-color: rgb(156, 11, 11);">
+					<i class='bx bxs-log-out-circle' ></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
 
 
     <!-- CONTENT -->
@@ -143,48 +143,51 @@
                                     <td><%= prdt.sellingPrice %></td>
                                     <td><%= prdt.stock %></td>
                                     <td>
-                                        <a class="btn btn-primary" href="/admin/editProduct?_id=<%= prdt._id %>">edit</a>
-                                        <!-- <a class="btn <%= prdt.isListed ? 'btn-info' : 'btn-danger' %>" href="/admin/listproduct?_id=<%= prdt._id%>" onclick="return alertMessage();"><%= prdt.isListed ? 'View' : 'Hide' %></a></td>    -->
-                                        <td>
-                                            <a class="btn <%= prdt.isListed ? 'btn-info' : 'btn-danger' %>" 
-                                               href="/admin/listproduct?_id=<%= prdt._id%>" 
-                                               onclick="return confirmAction();">
-                                               <%= prdt.isListed ? 'View' : 'Hide' %>
-                                            </a>
-                                          </td>
+                                        <a  class="btn btn-info" href="/admin/editProduct?_id=<%=prdt._id %>">EDIT</a>
+                                        <a class="btn  <%= prdt.isListed ? 'btn-info': 'btn-danger' %>"
+                                            href="/admin/listproduct?_id=<%= prdt._id %>"
+                                            data-toggle="modal" data-target="#listeditModal<%= prdt._id%>">
+                                            <%= prdt.isListed ? 'List' : 'Unlist' %></a>
+                               
+                               
+                                             <!-- Modal -->
+                                             <div class="modal fade" id="listeditModal<%= prdt._id%>" tabindex="-1" role="dialog"
+                                             aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                                             <div class="modal-dialog" role="document">
+                                                 <div class="modal-content">
+                                                     <div class="modal-header">
+                                                         <h5 class="modal-title" id="confirmationModalLabel">Confirmation
+                                                         </h5>
+                                                         <button type="button" class="close" data-dismiss="modal"
+                                                             aria-label="Close">
+                                                             <span aria-hidden="true">&times;</span>
+                                                         </button>
+                                                     </div>
+                                                     <div class="modal-body">
+                                                         <!-- Add confirmation message or content here -->
+                                                         Are you sure you want to <%= prdt.isListed ? 'Unlist' : 'list' %>
+                                                             this product?
+                                                     </div>
+                                                     <div class="modal-footer">
+                                                         <button type="button" class="btn btn-secondary"
+                                                             data-dismiss="modal">Close</button>
+                                                         <!-- Add your action button (Block/Unblock) here -->
+                                                         <a class="btn <%= prdt.isListed ? 'btn-danger' : 'btn-primary' %>"
+                                                             href="/admin/listproduct?_id=<%= prdt._id%>">
+                                                             <%= prdt.isListed? 'Unlist' : 'List' %>
+                                                         </a>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div>
                                           
-                                          <!-- Modal -->
-                                          <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                              <div class="modal-content">
-                                                <div class="modal-header">
-                                                  <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
-                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                  </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                  <!-- Add confirmation message or content here -->
-                                                  Are you sure you want to <%= prdt.isListed ? 'view' : 'hide' %> this product?
-                                                </div>
-                                                <div class="modal-footer">
-                                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                  <!-- Add your action button (View/Hide) here -->
-                                                  <a class="btn <%= prdt.isListed ? 'btn-info' : 'btn-danger' %>" href="/admin/listproduct?_id=<%= prdt._id%>">
-                                                    <%= prdt.isListed ? 'View' : 'Hide' %>
-                                                  </a>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          
-                                          <script>
+                                          <!-- <script>
                                             function confirmAction() {
                                               $('#confirmationModal').modal('show'); // Show the modal
                                               return false; // Prevent the default action (navigation)
                                             }
                                           </script>
-                                          
+                                           -->
 
 
 

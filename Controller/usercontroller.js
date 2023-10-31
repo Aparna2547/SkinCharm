@@ -166,9 +166,33 @@ exports.LoadShopPage = async (req, res, next) => {
   try {
     const user = req.session.userId;
 
+    
     //get users wishlist
     const wishlist = await Wishlist.findOne({ user });
+    console.log("wishlist",wishlist);
 
+
+// //for wishlisted in shop page
+//         //taking wishlisted items id as strings
+let productIdsAsString = [];
+
+if (user) {
+    const wishlisted = await Wishlist.findOne({ user });
+    if (wishlisted && wishlisted.product && wishlisted.product.length > 0) {
+        // Assuming that product_id is stored as ObjectId in the database
+        productIdsAsString = wishlisted.product.map(item => item.product_id.toString());
+    }
+}
+
+// Now you can use the productIdsAsString array as needed.
+
+
+//         let productIdsAsString = []
+//         const wishlisted = await Wishlist.findOne({user})
+//         if(user && wishlisted){
+//             productIdsAsString = wishlisted.product.map(item => item.product_id.toString());
+//         }
+  
     //category for listing
     const category = await Category.find({ isListed: true });
 
@@ -246,7 +270,8 @@ exports.LoadShopPage = async (req, res, next) => {
       sortToFront,
       page,
       limit,
-      totalPages: Math.ceil(productsCount/limit)
+      totalPages: Math.ceil(productsCount/limit),
+      productIdsAsString
     });
   } catch (error) {
     console.log(error);

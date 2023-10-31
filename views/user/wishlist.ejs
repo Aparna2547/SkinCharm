@@ -41,16 +41,18 @@
                                         <!-- <a href="#" class="add-cart">+ Add To Cart</a> -->
                                         <h5 class="my-2">₹<%= product.product_id.sellingPrice %>
                                         </h5>
+                                         
                                     </div>
-                                    <!-- <div class="mt-5">
-                                        <a href="/wishlistDelete?productId=<%= product.product_id._id%>" class="btn w-100 fw-bold text-white "> REMOVE</a>
-                                    </div> -->
-                                      <!-- for add to cart -->
-                                    <!-- <% if (productFound && productFound.product && productFound.product.length > 0) { %>
-                                        <a href="/cart" class="btn btn-danger fw-bold ls" style="background-color:white;height:3rem; width:10rem"><i class="fa fa-shopping-cart text-light py-2" style="font-size:1rem; "></i>GO TO CART</a>
+                                    <!-- for add to cart -->
+                                      
+                                    <% if (productFound && productFound.product && productFound.product.length > 0) { %>
+                                        <a href="/cart" class="btn btn-danger fw-bold ls" style="background-color:#c70261;height:3rem; width:10rem"><i class="fa fa-shopping-cart text-light py-2" style="font-size:1rem; "></i>GO TO CART</a>
                                     <% } else { %>
-                                        <a href="/addToCart?productId=<%= product._id %>" class="btn text-danger fw-bold " style="background-color: white;height:3rem; width:10rem"><i class="fa fa-shopping-cart text-light py-2" style="font-size:1rem; "></i>ADD TO CART</a>
-                                    <% } %> -->
+                                        <a href="/addToCart?productId=<%= product.product_id._id %>" class="btn text-white fw-bold w-100" style="background-color: #E80071;height:3rem; width:10rem"><i class="fa fa-shopping-cart text-light py-2" style="font-size:1rem; "></i>ADD TO CART</a>
+                                    <% } %>
+                                    <div class="mt-5">
+                                        <a href="/wishlistDelete?productId=<%= product.product_id._id%>" class="btn w-100 fw-bold text-white "> REMOVE</a>
+                                    </div> 
                                 </div>
                             </div>
                             <% }) }%>

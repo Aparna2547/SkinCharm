@@ -14,7 +14,7 @@ exports.loadWishList = async (req,res)=>{
         if(user){
            productFound =await Cart.findOne({user},{product:{$elemMatch:{product_id:id}}})
         }
-        console.log(productFound);
+        console.log("product productFound",productFound);
     
         const Data = await Wishlist.findOne({user}).populate('product.product_id')
         // console.log(Data.product[0].product_id);

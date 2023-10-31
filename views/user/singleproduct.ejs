@@ -35,10 +35,10 @@
             <% } %>
 
             <% if(wishlistFound && wishlistFound.product && wishlistFound.product.length > 0){ %>
-            <a href="/add_wishlist?productId=<%= singleProduct._id %>" class="btn fw-bold disabled text-white py-2" style="font-size:1rem; background-color:#c70261; height:3rem; width:10rem; "><i class="fa fa-heart text-light"></i> WISHLISTED</a>
-            <% }else{ %>
-            <a href="/add_wishlist?productId=<%= singleProduct._id %>" class="btn fw-bold text-white" style="background-color: #E80071; height:3rem; width:10rem"><i class="fa fa-heart text-light py-2" style="font-size:1rem; "></i>  WISHLIST</a>
-                <% } %>
+                <a href="/add_wishlist?productId=<%= singleProduct._id %>" class="btn fw-bold disabled text-white py-2" style="font-size:1rem; background-color:#c70261; height:3rem; width:10rem; "><i class="fa fa-heart text-light"></i> WISHLISTED</a>
+                <% }else{ %>
+                <a href="/add_wishlist?productId=<%= singleProduct._id %>" class="btn fw-bold text-white" style="background-color: #E80071; height:3rem; width:10rem"><i class="fa fa-heart text-light py-2" style="font-size:1rem; "></i>  WISHLIST</a>
+                    <% } %>
             </div>
             <div class="border mt-3 ms-1">
                 <h3 class="fw-bold p-1 ms-3">Description</h3>

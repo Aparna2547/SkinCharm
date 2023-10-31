@@ -129,11 +129,28 @@
                                                 </strike> ₹<%= product.sellingPrice %>
                                             </p>
                                         </div>
-                                        <!-- <a href="/addToWishlist?productId=<%= product._id%>" id="wishlistId" class="btn ls fw-bold w-100 text-white" class="btn fw-bold disabled text-white py-2" style="font-size:1rem; background-color:#c70261; height:3rem; width:10rem; ">WISHLIST</a> -->
 
-                                        <a href="#" data-product-id="<%= product._id %>"
+
+                                      
+    
+   
+                                        <button class="btn border w-100 fw-bold product-btns toWishlist
+                                        <% if(productIdsAsString.includes(product._id.toString())){ %> disabled btn-dark <% } %>"
+                                        data-item-id="<%= product._id %>">
+                                        <% if(productIdsAsString.includes(product._id.toString())){ %> 
+                                          WISHLISTED </i> 
+                                        <% } else { %>
+                                          WISHLIST </i>
+                                        <% } %>
+                                      </button>
+                                                                             
+                                        <!-- <a href="/addToWishlist?productId=<%= product._id%>" id="wishlistId" class="btn ls fw-bold w-100 text-white" class="btn fw-bold disabled text-white py-2" style="font-size:1rem; background-color:#c70261; height:3rem; width:10rem; ">WISHLIST</a> -->
+                                       
+
+                                        
+                                        <!-- <a href="#" data-product-id="<%= product._id %>"
                                             class="btn ls fw-bold w-100 text-white add-to-wishlist py-2"
-                                            style="font-size: 1rem; background-color: #c70261; height: 3rem; width: 10rem;">WISHLIST</a>
+                                            style="font-size: 1rem; background-color: #c70261; height: 3rem; width: 10rem;">WISHLIST</a> -->
 
                                     </div>
                                 </div>
