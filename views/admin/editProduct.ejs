@@ -1,15 +1,16 @@
 <%- include("../admin/header.ejs") %>
 
-    <!-- SIDEBAR -->
-    <section id="sidebar">
-        <a href="#" class="brand">
-                     <img src="/admin/assets/logo.png" style="width:5rem;height:5rem;margin-top: 20%;margin-left: 10%; border-radius: 50%;" alt="...">
+   
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<!-- <a href="#" class="brand"> -->
+			<img src="/admin/assets/logo.png" style="width:5rem;height:5rem;margin-top: 20%;margin-left: 10%; border-radius: 50%;" alt="...">
 
-        </a>
-        <ul class="side-menu top">
+		</a>
+		<ul class="side-menu top">
             <li>
                 <a href="/admin/home" class="text-decoration-none">
-            <i class='bx bxs-dashboard'></i>
+            <!-- <i class='bx bxs-dashboard me-0'></i> --><i class="fa fa-dashboard ms-1"></i>&nbsp;
             <span class="text">Dashboard</span>
                 </a>
             </li>
@@ -26,41 +27,40 @@
                 </a>
             </li>
             <li  class="active">
-                <a href="/admin/product"class="text-decoration-none">
+                <a href="/admin/product" class="text-decoration-none">
                     <img src="/admin/assets/producticon.png" alt="product" style="width:1.3rem;">&nbsp;&nbsp;
                     <span class="text">Product</span>
                 </a>
             </li>
-            <li>
-                <a href="/admin/orders">
-                    <i class='bx bxs-message-dots'></i>
-                    <span class="text">Order</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Coupons</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Check out</span>
-                </a>
-            </li>
-        </ul>
-        <ul class="side-menu">
-            <li>
-                <a href="/admin/adminLogout" class="logout">
-                    <i class='bx bxs-log-out-circle'></i>
-                    <span class="text">Logout</span>
-                </a>
-            </li>
-        </ul>
-    </section>
-    <!-- SIDEBAR -->
-
+			<li>
+				<a href="/admin/orders" class="text-decoration-none">
+					<i class='bx bxs-message-dots' ></i>
+					<span class="text">Order</span>
+				</a>
+			</li>
+			<li>
+				<a href="#" class="text-decoration-none">
+					<i class='bx bxs-group' ></i>
+					<span class="text">Coupons</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-group' ></i>
+					<span class="text">Check out</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="side-menu">
+			<li>
+				<a href="/admin/adminLogout" class="logout btn text-white fw-bold ls w-75" style="border-radius:0; background-color: rgb(156, 11, 11);">
+					<i class='bx bxs-log-out-circle' ></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
 
 
     <!-- CONTENT -->
@@ -80,133 +80,132 @@
         </nav>
         <!-- NAVBAR -->
 
-        <!-- MAIN -->
+
         <section class="background-radial-gradient overflow-hidden col-md-12">
-        
-            <h2 class="text-center text-secondary fs-3 my-2">EDIT PRODUCT</h2>
-              <div class="container px-4 py-2 px-md-5 text-center text-lg-start my-2 w-75">
+
+            <h2 class="text-center text-secondary mt-5 mb-0">EDIT PRODUCT</h2>
+            <div class="container px-4 py-5 px-md-5 text-center text-lg-start mt-0 w-75">
                 <div class="row gx-lg-5 align-items-center mb-5">
-                  <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
-            
-                  </div>
-            
-                  <div class="col-lg-6 mb-5 mb-lg-0 position-relative w-100">
-                    <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
-                    <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
-            
-                    <div class="card bg-glass">
-                      <div class="card-body px-4 py-5 px-md-5">
-          
-          
-                        <%
-                        if(typeof message !== 'undefined'){
-                          %>
-                          <h2><%= message %> </h2>
-                          <%
-          
-                        }
-                        %>
-                        <form action="/admin/editProduct"  method="post" id="formId" enctype="multipart/form-data">
-      
-                          
-                          <!-- id input -->
-                          <div class="form-outline mb-4">
-                            <input type="hidden" id="id" name="id" value="<%=prdt._id %>" class="form-control" />
-                          </div>
-      
-              
-      
-                              <!-- product input -->
-                              <div class="form-outline mb-4">
-                                  <label class="form-label" for="form3Example3">Product</label>
-                                  <input type="text" id="product"  value="<%=prdt.productname%>" name="productname" class="form-control" />
-                              </div>
-              
-                              <!-- category input -->
-                                <div class="form-outline mb-4">
+                    <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+                    </div>
 
-                                    <label class="form-label" for="form3Example3">Category</label>
-                                    <!-- <input type="text" id="category" name="category" class="form-control" /> -->
-                                    <select class="form-control" name="category" id="category">
-                                        <option value="selected">select a category</option>
-                                        <% category.forEach(cat=>{ %>
-                                            <option value="<%=cat._id%>" <%=pdtCat==cat.category && 'selected'%> >
-                                                <%=cat.category%>
-                                            </option>
-                                            <%})%>
-                                    </select>
-                                </div>
+                    <div class="col-lg-12 mb-5 mb-lg-0 position-relative w-100">
+                        <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+                        <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
 
-                                <!-- brand input -->
-                                <div class="form-outline mb-4">
-                                    <label class="form-label" for="form3Example3">Brand name</label>
-                                    <select class="form-control" name="brand" id="brand">
-                                        <option value="selected">select a brand</option>
-                                        <% category[0].brands.forEach(brand=>{ %>
-                                            <option value="<%=brand%>" <%=pdtBrand==brand && 'selected'%> >
-                                                <%=brand%>
-                                            </option>
-                                            <%})%>
-                                    </select>
-                                </div>
+                        <div class="card bg-glass">
+                            <div class="card-body px-4 py-5 px-md-5">
 
-      
-                              <!-- price input -->
-                              <div class="form-outline mb-4">
-                                  <label class="form-label" for="form3Example3">Actual Price</label>
-                                  <input type="text" id="actualPrice" name="actualPrice"  value="<%=prdt.actualPrice%>" class="form-control" />
-                              </div>
-      
-                              <!-- price input -->
-                              <div class="form-outline mb-4">
-                                  <label class="form-label" for="form3Example3">Selling Price</label>
-                                  <input type="text" id="sellingPrice" name="price"  value="<%=prdt.sellingPrice%>" class="form-control" />
-                              </div>
-      
-                               <!-- Stick input -->
-                               <div class="form-outline mb-4">
-                                  <label class="form-label" for="form3Example3">Stock</label>
-                                  <input type="text" id="stock"  value="<%=prdt.stock%>" name="stock" class="form-control" />
-                              </div>
-      
-                               <!-- description input -->
-                               <div class="form-outline mb-4">
-                                  <label class="form-label" for="form3Example3">description</label>
-                                  <textarea name="description" id="description" cols="10" rows="5" class="form-control" value="<%=prdt.description%>"></textarea>
-                      <!--value is not coming to the description-->
-                              </div>
-              
-                              <!-- image input -->
-                               <div class="form-outline mb-4">
-                                <label class="form-label" for="form3Example3">Images</label>
-                                <div class="d-flex justify-content-around align-items-center">
-                                    <%for(let i=0;i<3;i++){
-                                    if(prdt.image[i]){%>
-                                    <div style="width:6rem" class="m-2">
-                                        <img src="/images/<%=prdt.image[i].filename%>" alt="" class="img-fluid">
-                                        <a class="btn btn-danger btn-sm my-2 w-100" href="/admin/deleteImg?filename=<%=prdt.image[i].filename%>&id=<%=prdt._id%>">Delete</a>
-                                    </div>
-                                <%}else{%>  
-                                    <input style="width: 10rem;" type="file" name="image" id="image" class="form-control" />
-                                <% }}%>    
-                                </div>
-                                </div>
-              
-      
-                              <div id="errorMessage" class="text-center text-danger m-2 fw-bold"></div>
-              
-                              <!-- Submit button -->
-                              <button type="submit" class="btn btn-primary btn-block mb-4 w-100">
+
+                                <% if(typeof message !=='undefined' ){ %>
+                                    <h2>
+                                        <%= message %>
+                                    </h2>
+                                    <% } %>
+                                        <form action="/admin/editProduct" method="post" id="formId"
+                                            enctype="multipart/form-data">
+
+                                        <!-- id input -->
+                                        <div class="form-outline mb-4">
+                                            <input type="hidden" id="id" name="id" value="<%=prdt._id %>"  class="form-control">
+                                        </div>
+
+
+                                            <!-- product input -->
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label" for="form3Example3">Product</label>
+                                                <input type="text" id="product" name="productname" value="<%=prdt.productname%>"
+                                                    class="form-control" />
+                                            </div>
+
+                                            <!-- category input -->
+                                            <div class="form-outline mb-4">
+
+                                                <label class="form-label" for="form3Example3">Category</label>
+                                                <!-- <input type="text" id="category" name="category" class="form-control" /> -->
+                                                <select class="form-control" name="category" id="category">
+                                                    <option value="selected" selected>select a category</option>
+                                                    <% category.forEach(cat=>{ %>
+                                                        <option value="<%=cat._id%>"  <%=pdtCat==cat.category && 'selected'%> >
+                                                            <%=cat.category%>
+                                                        </option>
+                                                        <%})%>
+                                                </select>
+                                            </div>
+
+                                            <!-- brand input -->
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label" for="form3Example3">Brand name</label>
+                                                <select class="form-control" name="brand" id="brand">
+                                                    <option value="selected" selected>select a brand</option>
+                                                    <% category[0].brands.forEach(brand=>{ %>
+                                                        <option value="<%=brand%>" <%= pdtBrand == brand && 'selected'%>>
+                                                            <%=brand%>
+                                                        </option>
+                                                        <%})%>
+                                                </select>
+                                            </div>
+
+                                            <!-- actual price input -->
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label" for="form3Example3">Actual Price</label>
+                                                <input type="text" id="actualPrice" name="actualPrice" value="<%=prdt.actualPrice%>"
+                                                    class="form-control" />
+                                            </div>
+
+                                            <!-- selling price input -->
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label" for="form3Example3">Selling Price</label>
+                                                <input type="text" id="sellingPrice" name="sellingPrice" value="<%=prdt.sellingPrice%>"
+                                                    class="form-control" />
+                                            </div>
+
+                                            <!-- Stick input -->
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label" for="form3Example3">Stock</label>
+                                                <input type="text" id="stock" name="stock" class="form-control" value="<%=prdt.stock%>" />
+                                            </div>
+
+                                            <!-- description input -->
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label" for="form3Example3">description</label>
+                                                <textarea name="description" id="description" value="<%=prdt.description%>" cols="10" rows="5"
+                                                    class="form-control"></textarea>
+
+                                            </div>
+
+                                        <!-- image input -->
+                                        <div class="form-outline mb-4">
+                                            <label class="form-label" for="form3Example3">Images</label>
+                                            <div class="d-flex justify-content-around align-items-center">
+                                                <%for(let i=0;i<3;i++){
+                                                if(prdt.image[i]){%>
+                                                <div style="width:6rem" class="m-2">
+                                                    <img src="/images/<%=prdt.image[i].filename%>" alt="" class="img-fluid">
+                                                    <a class="btn btn-danger btn-sm my-2 w-100" href="/admin/deleteImg?filename=<%=prdt.image[i].filename%>&id=<%=prdt._id%>">Delete</a>
+                                                </div>
+                                            <%}else{%>  
+                                                <input style="width: 10rem;" type="file" name="image" id="image" class="form-control" />
+                                            <% }}%>    
+                                            </div>
+                                            </div>
+                                                                        <div id="errorMessage" class="text-center text-danger m-1 fw-bold">
+                                            </div>
+
+                                            <!-- Submit button -->
+                                            <button type="submit" class="btn btn-primary btn-block mb-4 w-100">
                                   Edit
                               </button>
-              
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-            <script src="/admin/js/editProductValidate.js"></script>
 
+
+                                        </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section: Design Block -->
+
+<script src="/admin/js/editProduct.js"></script>
     <%- include("../admin/footerpage.ejs") %>

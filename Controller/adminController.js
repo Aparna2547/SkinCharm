@@ -132,6 +132,13 @@ exports.LoadHome = async (req, res) => {
     let finalProfit = total - cancelcash;
     // console.log("final profit",finalProfit);
 
+// total profit 
+    let profit = (finalProfit*12)/100;
+    console.log("cancelcash"+cancelcash);
+
+   
+
+
     res.render("admin/home", {
       totalOrders: count,
       deliveredProduct: deliveredprdt,
@@ -140,6 +147,8 @@ exports.LoadHome = async (req, res) => {
       blockedUser,
       recentUser,
       finalProfit,
+      profit,
+      cancelcash
     });
   } catch (error) {
     console.log(error);
@@ -299,12 +308,13 @@ exports.loadUser = async (req, res) => {
   }
 };
 
-//block and unblock user in admin
+// //block and unblock user in admin
+
 
 exports.blockUser = async (req, res) => {
   try {
     const id = req.query.id;
-    console.log(id);
+    console.log("id of the catgory"+id);
     // find user by Id from the db
     const user = await User.findOne({ _id: id });
     // console.log(user);

@@ -37,7 +37,7 @@ exports.allProduct = async (req,res,next)=>{
      const Data = await Product.find({
        productname:{ $regex: '^' + search , $options: 'i'}
     }).limit(limit*1).skip((page-1)*limit).populate('category')
-    console.log(Data);
+    // console.log(Data);
 
     const productCount = await Product.find({
       productname: { $regex: '^' + search,$options:'i'}
@@ -113,10 +113,10 @@ exports.addProduct = async(req,res)=>{
 exports.loadProduct = async (req,res,next)=>{
     try {
       const id = req.query._id;
-      console.log("edit-"+id)
+      // console.log("edit-"+id)
       const editData = await Product.findOne({_id:id}).populate('category')
       const category = await Category.find({isListed:true})
-      console.log(editData.category);
+      // console.log(editData.category);
       if(editData){
         res.render('admin/editProduct',{prdt:editData,category,pdtCat:editData.category.category,pdtBrand:editData.brand})
       }
@@ -126,27 +126,72 @@ exports.loadProduct = async (req,res,next)=>{
     }
   }
   
-  //edit Product
+//   //edit Product
+
 exports.editProduct = async (req,res)=>{
-    try {
-      const id = req.body.id;
-      console.log("id for edit product "+id);
-      const {productname,category,brand,actualPrice,sellingPrice,stock,description}=req.body;
-      const image = req.files
-     // console.log(image,productname,category,brand,stock,description);
-     console.log(description);
-      const editdata = await Product.findOne({_id:id})
-        if(editdata){
-          await Product.findByIdAndUpdate({_id:id},{$push:{images:{$each:image}}},{$set:{productname,category,brand,actualPrice,sellingPrice,stock,description}});
-          console.log("updated successfully "+editdata);
-          res.redirect('/admin/product')
-        }else{
-          console.log("not updated")
-        }
-    } catch (error) {
-      console.log(error);
-    }
+  try {
+    const id = req.body.id;
+    console.log("id for edit product "+id);
+    const {productname,category,brand,actualPrice,sellingPrice,stock,description}=req.body;
+    const image = req.files
+   console.log(image,productname,category,brand,stock,description);
+   console.log(description);
+   const updateData = {
+  $push: { images: { $each: image } },
+  $set: {
+    productname: productname,
+    category: category, // You can use the actual ID here
+    brand: brand,
+    actualPrice: actualPrice,
+    sellingPrice: sellingPrice,
+    stock: stock,
+    description: description,
+  },
+};
+const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
+console.log("updated successfully "+updatedProduct);
+        res.redirect('/admin/product')
+
+
+    // const editdata = await Product.findOne({_id:id})
+    // console.log(editdata);
+    //   if(editdata){
+    //     editdata.productname=productname
+    //     await editdata.save()
+    //     // await Product.findByIdAndUpdate({_id:id},{$push:{images:{$each:image}}},{$set:{productname,category,brand,actualPrice,sellingPrice,stock,description}});
+    //     // console.log("updated successfully "+editdata);
+    //     res.redirect('/admin/product')
+    //   }else{
+    //     console.log("not updated")
+    //   }
+  } catch (error) {
+    console.log(error);
   }
+}
+// exports.editProduct = async (req,res)=>{
+//     try {
+//       const id = req.body.id;
+//       console.log("id for edit product "+id);
+//       const {productname,category,brand,actualPrice,sellingPrice,stock,description}=req.body;
+//       const image = req.files
+//      console.log(image,productname,category,brand,stock,description);
+//      console.log(description);
+//       const editdata = await Product.findOne({_id:id})
+//       console.log(editdata);
+//         if(editdata){
+//           editdata.productname=productname
+//           await editdata.save()
+//           // await Product.findByIdAndUpdate({_id:id},{$push:{images:{$each:image}}},{$set:{productname,category,brand,actualPrice,sellingPrice,stock,description}});
+//           // console.log("updated successfully "+editdata);
+//           res.redirect('/admin/product')
+//         }else{
+//           console.log("not updated")
+//         }
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
 
   //delete image
   exports.deleteProductImg = async (req,res)=>{

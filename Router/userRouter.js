@@ -136,11 +136,15 @@ userRoute.post('/payment',nocache(),addressController.payment)
 userRoute.get('/Profile',userAuth.isLogin,userController.loadUserProfile)
 
 //user profile page - POST
-userRoute.post('/Profile',userController.profile)
+// userRoute.post('/Profile',userController.profile)
 
 //user edit profile
 userRoute.get('/editProfile',userAuth.isLogin,userController.LoadUserEditProfile)
 userRoute.post('/editProfile',userController.editProfile)
+
+//change password
+userRoute.post('/changePassword',userController.changePassword)
+
 
 //Orders and returns
 userRoute.get('/orders&returns',userAuth.isLogin,orderController.ordersAndReturns)

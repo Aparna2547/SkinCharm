@@ -185,8 +185,19 @@ exports.addToCartWishlist = async (req,res,next)=>{
             await Cart.updateOne({user},{
                 $push:{product:{product_id:productId,count:1,price:product.sellingPrice}}
             })
+            console.log("pulled from wishlist");
         }
-        res.redirect('/wishlist')
+      
+        
+             // Now, remove the product from the wishlist
+            //  await Wishlist.updateOne({ _id: user }, {
+            //     $pull: { product: { product_id: productId } }
+            // });
+             await Wishlist.findOneAndUpdate({user:req.session.userId},{
+                $pull:{product:{product_id:productId}}
+            })
+        console.log("Item removed");
+            res.redirect('/wishlist');
         
     } catch (error) {
         console.log(error.message);

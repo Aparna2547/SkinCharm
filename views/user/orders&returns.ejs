@@ -1,4 +1,4 @@
-b<%- include("./head.ejs") -%>
+<%- include("./head.ejs") -%>
 <%- include("./header.ejs") -%>
 
 <section>
@@ -17,9 +17,9 @@ b<%- include("./head.ejs") -%>
                     <!-- </a> -->
                        <div class="d-block mx-5">
                     <p class="card-text"><b><%= item.product_id.productname %></b> </p>
-                    <p class="card-text"><b><%= item.product_id.category.toString() %></b> </p>
                     <p class="card-text"><b>Quantity:  <%= item.count %></b> </p>
                     <p class="card-text">  <b>₹  <%= item.price %></b> </p>
+
                     <%const date = new Date(item.orderDate);%>
                     <%const options = { month: 'short', day: 'numeric', year: 'numeric' };
                     const formattedDate = date.toLocaleDateString('en-US', options); %>
@@ -83,7 +83,7 @@ b<%- include("./head.ejs") -%>
      </div>
  </div>
 </div>
-<a href="/orderDetails?id=<%=order._id%>" class="btn btn-secondary text-white fw-bold w-50 py-1.5">View Details</a>
+<a href="/orderDetails?id=<%=item._id%>" class="btn btn-secondary text-white fw-bold w-50 py-1.5">View Details</a>
 
 
 

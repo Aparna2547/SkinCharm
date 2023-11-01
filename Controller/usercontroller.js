@@ -166,24 +166,45 @@ exports.LoadShopPage = async (req, res, next) => {
   try {
     const user = req.session.userId;
 
+    
     //get users wishlist
     const wishlist = await Wishlist.findOne({ user });
+    console.log("wishlist",wishlist);
 
+
+// //for wishlisted in shop page
+//         //taking wishlisted items id as strings
+let productIdsAsString = [];
+
+if (user) {
+    const wishlisted = await Wishlist.findOne({ user });
+    if (wishlisted && wishlisted.product && wishlisted.product.length > 0) {
+        // Assuming that product_id is stored as ObjectId in the database
+        productIdsAsString = wishlisted.product.map(item => item.product_id.toString());
+    }
+}
+
+
+  
     //category for listing
     const category = await Category.find({ isListed: true });
 
     //filter
     //category filter
     let categorySelected = req.query.category || "";
+    console.log("categorySelected",categorySelected);
     let categoryFind = await Category.find(
       { category: { $in: categorySelected } },
       { _id: 1 }
     );
+    console.log("categoryFind",categoryFind);
+
     if (!categoryFind.length) {
       categoryFind = await Category.find({}, { _id: 1 });
     }
 
     let categoryStrings = categoryFind.map((val) => val._id.toString());
+    console.log(categoryStrings);
     let categoryToFront = req.query.category || "";
 
     //brands filter
@@ -246,7 +267,8 @@ exports.LoadShopPage = async (req, res, next) => {
       sortToFront,
       page,
       limit,
-      totalPages: Math.ceil(productsCount/limit)
+      totalPages: Math.ceil(productsCount/limit),
+      productIdsAsString
     });
   } catch (error) {
     console.log(error);
@@ -318,9 +340,9 @@ exports.profile = async (req, res) => {
 exports.LoadUserEditProfile = async (req, res, next) => {
   try {
     const id = req.query._id;
-    console.log(id);
+    // console.log(id);
     const editData = await User.findOne({ _id: id });
-    console.log(editData);
+    // console.log(editData);
     res.render("editProfile", { data: editData });
   } catch (error) {
     console.log(error);
@@ -332,24 +354,73 @@ exports.LoadUserEditProfile = async (req, res, next) => {
 exports.editProfile = async (req, res) => {
   try {
     const id = req.body.id;
-    // console.log("id of the id"+id)
-    const { name, mobile, email } = req.body;
-    // console.log(name,mobile,email);
-    const data = await User.findOne({ _id: id });
-    if (data) {
-      await User.findByIdAndUpdate(
-        { _id: id },
-        { $set: { name, mobile, email } }
-      );
-      console.log("User profile edited..." + data);
-      res.redirect("/Profile");
-    } else {
-      console.log("not edited data");
+    console.log("id of the id"+id)
+    const {name,mobile} = req.body;
+    console.log(name,mobile);
+
+    const data = await User.findOne({_id:id})
+    console.log("data",data);
+    if(data){
+      // data.username=name;
+      // data.mobile= mobile;
+      // await data.save();
+      await User.updateOne({_id:id},
+        {
+          $set:{
+            username:name,
+            mobile:mobile
+          }});
+          res.redirect('/Profile')
+      console.log("data changed");
     }
   } catch (error) {
     console.log(error);
   }
 };
+
+
+// change password
+exports.changePassword = async (req, res) => {
+  try {
+    console.log("hai this is changepassword page");
+    const user = req.session.userId;
+    console.log(user);
+    const userFound = await User.findOne({ _id: user });
+    console.log(userFound);
+
+    const currentPassword = req.body.currentpassword;
+    console.log("currentPassword", currentPassword);
+    const hashedPassword = userFound.password;
+    console.log(hashedPassword);
+    const password = await bcrypt.compare(currentPassword, hashedPassword);
+    const newPassword = req.body.newpassword;
+    console.log(newPassword);
+
+    if (password) {
+      console.log("matched");
+    
+      if (newPassword) {
+        const newHashedPassword = await bcrypt.hash(newPassword, 10);
+        
+        // Use the user's _id as the filter criteria
+        await User.updateOne({ _id: user }, {
+          $set: {
+            password: newHashedPassword
+          }
+        });
+
+        console.log('password changed');
+        res.redirect('/Profile')
+      } else {
+        console.log("New password is empty or undefined.");
+      }
+    } else {
+      console.log("not matched");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 //user logout
 exports.userLogOut = async (req, res, next) => {
