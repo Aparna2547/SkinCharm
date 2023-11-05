@@ -34,7 +34,7 @@ userRoute.post('/forgotPasswordOtp',userController.forgotPasswordOtp)
 //forgotPassword reset opage= get
 userRoute.get('/resetPassword',userController.resetPasswordPage)
 //forgot password reset password -post
-userRoute.get('/resetPassword',userController.resetPassword)
+userRoute.post('/resetPassword',userController.resetPassword)
 
 
 
@@ -192,6 +192,9 @@ userRoute.get('/orderDetails',userAuth.isLogin,orderController.viewDetailsUser)
 
 //cancel order
 userRoute.get('/cancelOrder',userAuth.isLogin,orderController.cancelOrder)
+
+//wallet 
+userRoute.get('/wallet',userAuth.isLogin,orderController.loadWallet)
 
 //user logout
 userRoute.get('/logout',nocache(),userController.userLogOut) 

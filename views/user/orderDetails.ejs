@@ -46,13 +46,13 @@
                                 
                                 <!--  -->
                                 <div class="col-4">
-                                    <p class="fw-bold mb-0">
+                                    <h6 class="fw-bold mb-0">
                                         <%= orderFound.product_id.productname %>
-                                    </p>
-                                    <p class="fw-bold mb-0">Quantity: <%= orderFound.count %>
-                                    </p>
-                                    <p class="fw-bold mb-0">RS: ₹<%= orderFound.count * orderFound.price %>
-                                    </p>
+                                    </h6>
+                                    <h6 class="fw-bold mb-0 fs-6">Quantity: <%= orderFound.count %>
+                                    </h6>
+                                    <h6 class="fw-bold mb-0">RS: ₹<%= orderFound.count * orderFound.price %>
+                                    </h6>
 
                                     <%const date = new Date(orderFound.orderDate);%>
                                     <%const options = { month: 'short', day: 'numeric', year: 'numeric' };
@@ -84,8 +84,8 @@
                                     </p>
                                 </div>
                                 <div class="col-4">
-                                    <p  class="card-text fw-bold <%=orderFound.orderStatus >4 && 'text-danger'  %>" >  <b class="text-center" style="text-align:center;">  <%= status %> on <%=formattedDate  %></b> </p>
-                                    <p class="card-text fw-bold"> payment type:<%=orderFound.payment%></p>
+                                    <h5  class="card-text fw-bold <%=orderFound.orderStatus >4 && 'text-danger'  %>" >  <b class="text-center" style="text-align:center;">  <%= status %> on <%=formattedDate  %></b> </h5>
+                                    <h5 class="card-text fw-bold"> payment type:&nbsp;&nbsp;<%=orderFound.payment%></h5>
                                 </div>
                                 
                                 <div class="col-4">

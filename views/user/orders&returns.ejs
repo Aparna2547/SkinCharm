@@ -19,6 +19,7 @@
                     <p class="card-text"><b><%= item.product_id.productname %></b> </p>
                     <p class="card-text"><b>Quantity:  <%= item.count %></b> </p>
                     <p class="card-text">  <b>₹  <%= item.price %></b> </p>
+                    <p class="card-text"><b>Payment type: <%= item.payment %></b></p>
 
                     <%const date = new Date(item.orderDate);%>
                     <%const options = { month: 'short', day: 'numeric', year: 'numeric' };

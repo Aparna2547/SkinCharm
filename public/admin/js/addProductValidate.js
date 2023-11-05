@@ -43,7 +43,7 @@ formId.addEventListener("submit", (event) => {
   }
   else if (sellingPrice <= 10) {
     event.preventDefault();
-    errorMessage.textContent = "Enter valid price";
+    errorMessage.textContent = "Enter selling valid price";
   }
   else if(sellingPrice>actualprice){
     event.preventDefault();

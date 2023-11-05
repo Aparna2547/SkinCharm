@@ -13,11 +13,11 @@ const imageInput3 = document.getElementById("image3")
 const errorMessage = document.getElementById("errorMessage");
 
 formId.addEventListener("submit", (event) => {
+  console.log("form submitted");
   const name = nameInput.value;
   const category = categoryInput.value;
   const brand = brandInput.value
   const actualprice = actualpriceInput.value;
-  console.log(actualprice)
   const sellingPrice = sellingpriceInput.value;
   const stock = stockInput.value;
   // const image1 = imageInput1.value;
@@ -26,7 +26,8 @@ formId.addEventListener("submit", (event) => {
   const description = descriptionInput.value;
   
 
-  if (name.length <= 5 ) {
+  if (name.trim().length <= 5 ) {
+     console.log(name)
     event.preventDefault();
     errorMessage.textContent = "Enter the name of the product";
   }
@@ -38,15 +39,19 @@ formId.addEventListener("submit", (event) => {
     event.preventDefault()
     errorMessage.textContent = "Select the brand"
   }
-  else if (actualprice < 0 && typeof(actualprice)!=Number && actualprice == "") {
+  else if (actualprice <= 10) {
     event.preventDefault();
-    errorMessage.textContent = "Enter valid price";
+    errorMessage.textContent = "Enter  actual price of the product";
   }
-  else if (sellingPrice < 0 && typeof(sellingPrice)!=Number && sellingPrice == "") {
+  else if (sellingPrice <= 10) {
     event.preventDefault();
-    errorMessage.textContent = "Enter valid price";
+    errorMessage.textContent = "Enter selling price of the product";
   }
-  else if (stock <= 0 && typeof(stock)!=Number && stock =="") {
+  else if(sellingPrice>actualprice){
+    event.preventDefault();
+    errorMessage.textContent = "selling proce must be less than actual price"
+  }
+  else if (stock <= 0 ) {
     event.preventDefault();
     errorMessage.textContent = "Stock cannot be zero or negative number";
   }

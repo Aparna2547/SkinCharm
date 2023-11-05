@@ -63,7 +63,7 @@ exports.addAddressCart = async (req,res,next)=>{
             cartCount = cart.product.length;
           }
         }
-        res.render('addAddress',cartCount)
+        res.render('addAddress',{cartCount})
     } catch (error) {
         console.log(error);
         next(error)
@@ -280,7 +280,7 @@ exports.editAddressProfile = async (req,res)=>{
   //Address in profile
   exports.addAddressProfileLoad = async (req,res,next)=>{
     try {
-        res.render('addAddress')
+        res.render('profile')
     } catch (error) {
         console.log(error);
         next(error)

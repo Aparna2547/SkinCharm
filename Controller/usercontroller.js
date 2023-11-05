@@ -101,6 +101,9 @@ exports.LoadRegister = async (req, res) => {
 //rendering forgotpassword
 exports.loadforgotpassword = async (req,res)=>{
   try {
+     //warning mesage
+     var context = req.app.locals.specialContext;
+     req.app.locals.specialContext = null;
     res.render("forgotPassword");
   } catch (error) {
     console.log(error);
@@ -118,15 +121,21 @@ exports.forgotPassword  = async (req,res)=>{
     const user = await User.findOne({mobile:mobile})
     console.log(user);
     if(user){
-    //   client.verify.v2.services(serviceId).verifications.create({
-    //     to: `+91${mobile}`,
-    //     channel: "sms",
-    //   });
+      client.verify.v2.services(serviceId).verifications.create({
+        to: `+91${mobile}`,
+        channel: "sms",
+      });
     // }
-    // req.session.otpPageForSignUp = true;
-    res.redirect("/forgotPasswordOtp");
-    // console.log(req.session.otpPageForSignUp);
-    // res.redirect(`/forgotPasswordOtp?mobile=${mobile}`);
+
+    req.session.otpPageForSignUp = true;
+    // res.redirect("/forgotPasswordOtp");
+    console.log(req.session.otpPageForSignUp);
+    res.redirect(`/forgotPasswordOtp?mobile=${mobile}`);
+  }
+  else{
+    res.redirect('/login')
+    req.app.locals.specialContext = "mobile number does not exist";
+
   }
  } catch (error) {
     console.log(error);
@@ -138,12 +147,12 @@ exports.forgotPassword  = async (req,res)=>{
 //remdering forgotPasswordOtpPage
 exports.forgotPasswordOtpPage = async(req,res)=>{
   try {
-   // if (req.session.otpPageForSignUp == true) {
+   if (req.session.otpPageForSignUp == true) {
     
       res.render('forgotPasswordOtp')
-    // } else {
-    //   res.redirect("/register");
-    // }
+    } else {
+      res.redirect("/register");
+    }
    
   } catch (error) {
     console.log(error);
@@ -168,18 +177,18 @@ exports.forgotPasswordOtp = async (req,res)=>{
    
     const mobile = req.session.mobile
     const {otp} = req.body
-    // const ver_check = await client.verify.v2
-    //Checking the otp is correct
-    //.services(serviceId)
-    // .verificationChecks.create({ to: `+91${mobile}`, code: otp });
-    // if (ver_check.status === "approved") {
-    //     req.session.passwordReset = true
-    //     res.redirect('/resetpassword')
-    // }
-    // else{
-    //     req.app.locals.specialContext = 'Invaid otp. Please enter the correct otp';
-    //     res.redirect(`/otp_reset_password?mobile=${mobile}`);
-    // }
+    const ver_check = await client.verify.v2
+    // Checking the otp is correct
+    .services(serviceId)
+    .verificationChecks.create({ to: `+91${mobile}`, code: otp });
+    if (ver_check.status === "approved") {
+        req.session.passwordReset = true
+        res.redirect('/resetpassword')
+    }
+    else{
+        req.app.locals.specialContext = 'Invaid otp. Please enter the correct otp';
+        res.redirect(`/resetPassword?mobile=${mobile}`);
+    }
     res.redirect('/resetpassword')
     // }
   } catch (error) {
@@ -590,9 +599,7 @@ exports.editProfile = async (req, res) => {
     const data = await User.findOne({_id:id})
     console.log("data",data);
     if(data){
-      // data.username=name;
-      // data.mobile= mobile;
-      // await data.save();
+     
       await User.updateOne({_id:id},
         {
           $set:{
@@ -648,31 +655,7 @@ if(password){
       console.log('password changed');
       res.redirect('/Profile')
 }
-    // if(currentPassword =='' || newPassword=='' ||confirmPassword ==''){
-    //   return res.json({status:'empty'})
-    // }else if(newPassword !== confirmPassword){
-    //   return res.json({status:'different'})
-    // }
-    // const hashedPassword = userFound.password;
-    // console.log(hashedPassword);
-    // const password = await bcrypt.compare(currentPassword, hashedPassword);
-    // if (!password) {
-    //   return res.json({status:'not matching'})
-    // }
-    // else{
-    //   const newHashedPassword = await bcrypt.hash(newPassword, 10);
-        
-    //     // Use the user's _id as the filter criteria
-    //     await User.updateOne({ _id: user }, {
-    //       $set: {
-    //         password: newHashedPassword
-    //       }
-    //     });
-
-    //     console.log('password changed');
-    //   return res.json({status:'done'})
-    // }
-     
+    
   } catch (error) {
     console.log(error.message);
   }

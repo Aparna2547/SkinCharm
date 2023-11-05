@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const { log } = require("console");
+const { totalmem } = require("os");
 const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
 
 ///for razorpay
@@ -300,16 +301,75 @@ exports.cancelOrder = async (req, res, next) => {
     let product  = ((order.orders[0].product_id._id))
     let productCount = order.orders[0].count
 
-    await Product.findByIdAndUpdate({_id:product},{$inc:{stock:productCount}})
+        //reduce stock when order is confirmed
+        await Product.findByIdAndUpdate({_id:product},{$inc:{stock:productCount}})
 
+    let totalAmt = order.orders[0].price;
+    console.log("total amount",totalAmt)
+    let payment = order.orders[0].payment
+    console.log('payment',payment);
 
+   
 
+    //setting amount into wallet credit
+  if(payment == 'Online' || payment =='Wallet'){
+    await User.findByIdAndUpdate(user,{
+        $inc : {wallet : totalAmt} ,
+        $push : {
+         walletHistory :{
+                transactionType :"Product cancellation",
+                method : 'credit',
+                amount : totalAmt,
+                date : Date.now()
+            },
+        }
+    })
      res.redirect('/orders&returns')
+}
     
     } catch (error) {
       console.error("Error updating order:", error);
     }
   };
+
+
+//load wallet page
+exports.loadWallet = async (req,res)=>{
+    try {
+         //getting cart product count - badge
+         let user = req.session.userId;
+    let cartCount = 0
+    if (user) {
+      const cart = await Cart.findOne({ user });
+      // Assuming you want to calculate cartCount based on the user's cart items
+      if (cart) {
+        cartCount = cart.product.length;
+      }
+    }
+
+    //wallet 
+    let walletFound = await User.findById(user)
+    const wallet = walletFound.wallet;
+    const walletHistory = walletFound.walletHistory;
+    console.log(walletHistory);
+
+    // console.log(wall etFound);
+        res.render('wallet',{cartCount,wallet,walletHistory})
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 //admin controller
 exports.orderLoad = async (req, res) => {
