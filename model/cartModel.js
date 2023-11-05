@@ -16,7 +16,10 @@ cartSchema = new mongoose.Schema({
         price:{
             type:Number,
         }
-    }]
+    }],
+    isCouponApplied:{
+        type : String
+    }
 })
 
 

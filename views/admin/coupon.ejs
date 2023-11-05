@@ -17,7 +17,7 @@
             <span class="text mx-2 fw-bold">Dashboard</span>
                 </a>
             </li>
-            <li class="active">
+            <li>
                 <a href="/admin/user" class="text-decoration-none">
                     <!-- <img src="/admin/assets/usericon.png" alt="user" style="width:1rem;">&nbsp;&nbsp; -->
 					<i class="fas fa-users" style="font-size: 24px"></i>
@@ -48,7 +48,7 @@
 					<span class="text mx-2 fw-bold">Order</span>
 				</a>
 			</li>
-			<li>
+			<li class="active">
 				<a href="/admin/coupons" class="text-decoration-none">
 					<i class='fas fa-tag' style='font-size:24px'></i>
 					<span class="text mx-2 fw-bold">Coupons</span>
@@ -74,8 +74,6 @@
 
 
 
-
-
     <!-- CONTENT -->
     <section id="content">
         <!-- NAVBAR -->
@@ -97,42 +95,78 @@
             <div class="table-data">
                 <div class="order">
                     <div class="head">
-                        <h3>user Details</h3>
+                        <h3>COUPON </h3>
                         <!-- do the search user -->
                         <div class="col-xs-12 col-sm-4">
-                            <form class="search-box d-flex">
-                                <input type="text" name="search" class="form-control d-inline" name="search"
-                                    placeholder="Search...">
-                                <button class="btn btn-light d-inline" type="submit">Search</button>
-                            </form>
+                            <h6 class="text-center text-danger">
+                                <%=locals.context?context:" "%>
+                           </h6>
+                            <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+ ADD COUPON
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Coupon</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body p-3">
+            <form action="/admin/addCoupon" method="post" id="formId">
+          <label for="">Coupon Name</label><br>
+          <input type="text" name="couponName" id="couponName" class="form-control m-0">
+          <label for="" class="mt-1">Minimum Purchase</label><br>
+          <input type="text" name="minimumPurchase" id="minimumPurchase" class="form-control m-0">
+          <label for="" class="mt-1">Maximum Discount</label><br>
+          <input type="text" name="maximumDiscount" id="maximumDiscount" class="form-control m-0">
+          <label for="" class="mt-1">Expiry Date</label><br>
+          <input type="date" name="expiryDate" id="expiryDate" class="form-control m-0">
+        </div>
+        <div id="errorMessage" class="text-danger text-center mt-0 fw-bold"></div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary w-100">Save</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
                         </div>
                     </div>
                     <table>
                         <thead>
                             <tr>
-                                <th>User</th>
-                                <th>mobile</th>
-                                <th>Action</th>
+                                <th>#</th>
+                                <th>Coupon Name</th>
+                                <th>Mininum Purchase</th>
+                                <th>Maximum Discount</th>
+                                <th>Expiry Date</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-
-                            <% userData.forEach(user=> { %>
+                            <% data.forEach((item, index) => { %>
                                 <tr>
-                                    <td>
-                                        <%=user.username%>
-                                    </td>
-                                    <td>
-                                        <%=user.mobile%>
-                                    </td>
-                                    <!-- <td><a class="btn showpopup <%= user.isBlocked ? 'btn-danger' : 'btn-primary' %>" href="/admin/blockUser?id=<%= user._id%>" ><%= user.isBlocked ? 'Unblock' : 'Block' %></a></td> -->
-                                    <td> <a class="btn  <%= user.isBlocked ? 'btn-danger' : 'btn-primary' %>"
-                                            href="/admin/blockUser?id=<%= user._id%>" data-toggle="modal"
-                                            data-target="#confirmationModal<%= user._id%>">
-                                            <%= user.isBlocked ? 'Unblock' : 'Block' %>
+                                    <td class="mt-2"><%= index + 1 %></td>
+                                    <td><%=item.couponName%> </td>
+                                    <td><%=item.minimumPurchase%> </td>
+                                    <td><%=item.maximumDiscount%> </td>
+                                    <td> <% const expiryDate = new Date(item.expiryDate); %>
+                                        <% const options = { month: 'short', day: 'numeric', year: 'numeric' }; %>
+                                        <%= expiryDate.toLocaleDateString('en-US', options) %> </td>
+                                    <td><a  href="/admin/editCoupon?_id=<%= item._id %>" class="btn btn-primary mx-2">edit</a>
+                                        <!-- <a href="/admin/deleteCoupon?_id=<%= item._id %>" class="btn btn-primary">hide</a></td> -->
+                                         <a class="btn  <%= item.showStatus ? 'btn-danger' : 'btn-primary' %>"
+                                            href="/admin/deleteCoupon?_id=<%= item._id %>" data-toggle="modal"
+                                            data-target="#confirmationModal<%= item._id%>">
+                                            <%= item.showStatus ? 'view' : 'hide' %>
                                         </a></td>
                                     <!-- Modal -->
-                                    <div class="modal fade" id="confirmationModal<%= user._id%>" tabindex="-1" role="dialog"
+                                    <div class="modal fade" id="confirmationModal<%= item._id%>" tabindex="-1" role="dialog"
                                         aria-labelledby="confirmationModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
@@ -146,43 +180,29 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <!-- Add confirmation message or content here -->
-                                                    Are you sure you want to <%= user.isBlocked ? 'unblock' : 'block' %>
-                                                        this user?
+                                                    Are you sure you want to <%= item.showStatus ? 'view' : 'hide' %>
+                                                        ?
                                                        
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                         data-dismiss="modal">Close</button>
                                                     <!-- Add your action button (Block/Unblock) here -->
-                                                    <a class="btn <%= user.isBlocked ? 'btn-danger' : 'btn-primary' %>"
-                                                        href="/admin/blockUser?id=<%= user._id%>">
-                                                        <%= user.isBlocked ? 'Unblock' : 'Block' %>
+                                                    <a class="btn <%= item.showStatus ? 'btn-danger' : 'btn-primary' %>"
+                                                        href="/admin/deleteCoupon?id=<%= item._id%>">
+                                                        <%= item.showStatus ? 'view' : 'hide' %>
                                                     </a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </tr>
-                                <% }); %>
-                                    <tr>
-                                        <td>
-                                            <%=locals.context?context:" "%></td>
-                                </tr>
+                            <% }); %>
+                      
                             
                         </tbody>
                     </table>
-                    <div class="pagination-container text-center">
-                        <% if (currentPage > 1) { %>
-                          <a href="?search=<%= search %>&page=<%= currentPage - 1 %>" class="pagination-arrow previous"><</a>
-                        <% } %>
-                        <% for (let i = 1; i <= totalPages; i++) { %>
-                          <a href="?search=<%= search %>&page=<%= i %>" class="pagination-number fs-5 fw-bold<%= i === currentPage ? ' active' : '' %>"><%= i %></a>
-                        <% } %>
-                        <% if (currentPage < totalPages) { %>
-                          <a href="?search=<%= search %>&page=<%= parseInt(currentPage) + 1 %>" class="pagination-arrow next">></a>
-                        <% } %>
-                      </div>
-                      
+                
                       
             </div>
             </div>
@@ -191,5 +211,5 @@
         <!-- MAIN -->
     </section>
     <!-- CONTENT -->
-
+<script src="/admin/js/addCouponValidation.js"></script>
     <%- include("../admin/footerpage.ejs") %>

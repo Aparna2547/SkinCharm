@@ -8,6 +8,9 @@ userSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
+    email:{
+    type: String
+    },
     password:{
         type:String,
         required:true
@@ -22,7 +25,22 @@ userSchema = new mongoose.Schema({
     },
     is_admin:{
         type:Number
-    }
+    },
+    wallet :{
+        type : Number,
+        default :0
+    },
+    walletApplied :{
+        type:Boolean,
+        default :false
+    },
+    walletHistory:[{
+        transactionType: String,
+        method: String,
+        amount: Number,
+        date: Date,
+    }]  
+    
 })
 
 module.exports =mongoose.model("User",userSchema)

@@ -4,18 +4,19 @@ couponSchema = new mongoose.Schema({
         type : String,
         required : true
     },
-    mininumPurchase : {
+    minimumPurchase : {
         type : Number,
         required : true
     },
-    MaximumDiscount : {
+    maximumDiscount : {
         type :Number
     },
     expiryDate : {
         type : Date
     },
     showStatus : {
-        type : Boolean
+        type : Boolean,
+        default:true
     },
     usedUser :{
         type : mongoose.Schema.Types.ObjectId,

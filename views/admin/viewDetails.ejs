@@ -2,7 +2,6 @@
 
 
 
-    
 	<!-- SIDEBAR -->
 	<section id="sidebar">
 		<!-- <a href="#" class="brand"> -->
@@ -12,44 +11,53 @@
 		<ul class="side-menu top">
             <li>
                 <a href="/admin/home" class="text-decoration-none">
-            <!-- <i class='bx bxs-dashboard me-0'></i> --><i class="fa fa-dashboard ms-1"></i>&nbsp;
-            <span class="text">Dashboard</span>
+            <!-- <i class='bx bxs-dashboard me-0'></i><i class="fa fa-dashboard ms-1"></i>&nbsp; -->
+			<i class="fas fa-chart-line" style="font-size: 24px"></i>
+
+            <span class="text mx-2 fw-bold">Dashboard</span>
                 </a>
             </li>
             <li>
                 <a href="/admin/user" class="text-decoration-none">
-                    <img src="/admin/assets/usericon.png" alt="user" style="width:1rem;">&nbsp;&nbsp;
-                    <span class="text">Users</span>
+                    <!-- <img src="/admin/assets/usericon.png" alt="user" style="width:1rem;">&nbsp;&nbsp; -->
+					<i class="fas fa-users" style="font-size: 24px"></i>
+
+                    <span class="text mx-2 fw-bold">Users</span>
                 </a>
             </li>
             <li>
                 <a href="/admin/category" class="text-decoration-none">
+					<!-- <i class="fas fa-th-list" style="font-size: 24px"></i> -->
+
                     <img src="/admin/assets/category.png" alt="user" style="width:1rem;">&nbsp;&nbsp;
-                    <span class="text">Categories</span>
+                    <span class="text  mx-2 fw-bold">Categories</span>
                 </a>
             </li>
             <li>
                 <a href="/admin/product" class="text-decoration-none">
-                    <img src="/admin/assets/producticon.png" alt="product" style="width:1.3rem;">&nbsp;&nbsp;
-                    <span class="text">Product</span>
+                    <!-- <img src="/admin/assets/producticon.png" alt="product" style="width:1.3rem;">&nbsp;&nbsp; -->
+
+					<i class="fas fa-cubes " style="font-size: 24px"></i>
+					<span class="text  mx-2 fw-bold">Product</span>
                 </a>
             </li>
 			<li  class="active">
 				<a href="/admin/orders" class="text-decoration-none">
-					<i class='bx bxs-message-dots' ></i>
-					<span class="text">Order</span>
+					<i class="fa fa-truck fw-bold" aria-hidden="true"></i>
+
+					<span class="text mx-2 fw-bold">Order</span>
 				</a>
 			</li>
 			<li>
-				<a href="#" class="text-decoration-none">
-					<i class='bx bxs-group' ></i>
-					<span class="text">Coupons</span>
+				<a href="/admin/coupons" class="text-decoration-none">
+					<i class='fas fa-tag' style='font-size:24px'></i>
+					<span class="text mx-2 fw-bold">Coupons</span>
 				</a>
 			</li>
 			<li>
-				<a href="#">
-					<i class='bx bxs-group' ></i>
-					<span class="text">Check out</span>
+				<a href="/admin/banner">
+					<i class="fas fa-image" style="font-size: 24px"></i>
+					<span class="text  mx-2 fw-bold">Banner</span>
 				</a>
 			</li>
 		</ul>
@@ -63,6 +71,8 @@
 		</ul>
 	</section>
 	<!-- SIDEBAR -->
+
+
 
 
     <!-- CONTENT -->
@@ -86,17 +96,50 @@
                 <div class="order bg-gradient">
                     <div class="p-3 d-flex" style="border: 2px solid grey;">
                         <% if (orderFound) { %>
-                         
-                            <div style="width: 5rem">
+                         <div class="row">
+                            <div class="col-4">
                               <img src="/images/<%= orderFound.product_id.image[0].filename %>" alt="" class="img-fluid">
                             </div>
-                            <div class="mx-5">
+                            <div class="m-5 col-4">
                               <p class="fw-bold mb-0"><%= orderFound.product_id.productname %></p>
                               <p class="fw-bold mb-0">Quantity: <%= orderFound.count %></p>
                               <p class="fw-bold mb-0">Price: ₹<%= orderFound.count * orderFound.price %></p>
-                              <p class="fw-bold mb-0">Status: <%= orderFound.orderStatus %></p>
+                            
                             </div>
-                         
+                            <%const date = new Date(orderFound.orderDate);%>
+                            <%const options = { month: 'short', day: 'numeric', year: 'numeric' };
+                            const formattedDate = date.toLocaleDateString('en-US', options); %>
+                            <% 
+                            var status
+                                switch (orderFound.orderStatus) {
+                                    case 1:
+                                        status = "Confirmed"
+                                        break;
+                                    case 2:
+                                        status = "Shipped"
+                                        break;
+                                    case 3:
+                                        status = "Out for delivery"
+                                        break
+                                    case 4:
+                                        status = "Delivered"
+                                        break;
+                                    case 5:
+                                        status = "Cancelled"
+                                        break;
+                                    case 6:
+                                        status = "Cancelled by admin"
+                                    default:
+                                        break;
+                                }
+                            %>
+                            </p>
+                        </div>
+                        <div class="col-4 m-5">
+                            <p  class="card-text fw-bold <%=orderFound.orderStatus >4 && 'text-danger'  %>" >  <b class="text-center" style="text-align:center;">  <%= status %> on <%=formattedDate  %></b> </p>
+                            <p class="card-text fw-bold"> payment type:<%=orderFound.payment%></p>
+                        </div>
+                        </div>
                         <% } else { %>
                           <p>No items found in the order.</p>
                         <% } %>
@@ -111,12 +154,13 @@
                     <div class="p-3" style="border: 2px solid grey;">
                         <h6>Delivery Address</h6>
                         <% if(orderFound){ %>
-                        
-                            <div class="mx-0">               
+                        <div class="row">
+                            <div class="mx-0 col-4">               
                                 <p class="fw-bold mb-0"><%=orderFound.address.name %></p>
                                 <p class="mb-0"><%=orderFound.address.address%>,<%=orderFound.address.locality%>,<%=orderFound.address.city%>,<%=orderFound.address.state%>-<%=orderFound.address.pincode%></p>
                                 <p class="fw-bold mb-0"><%=orderFound.address.phone%></p>
                             </div>
+                        </div>
                       <% } %>
                     </div>  
                    

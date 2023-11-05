@@ -5,7 +5,10 @@ const  Category = require('../model/categoryModel')
 const Product = require('../model/productModel')
 const session = require('express-session')
 const bcrypt = require('bcrypt')
+const sharp = require('sharp')
 
+const fs = require('fs');
+const path = require('path');
 
 
 
@@ -85,9 +88,52 @@ exports.addProduct = async(req,res)=>{
     // console.log(req.body);
     try {
       const image = req.files
-      // console.log("image:+"+ image);
+
+
+      const imageFolder = 'images'; // Folder where your original images are stored
+
+// Read the list of image filenames from the 'images' folder
+fs.readdir(imageFolder, async (err, files) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+
+  for (let i = 0; i < files.length; i++) {
+    const filename = files[i];
+    // const inputPath = path.join(imageFolder, filename);
+
+    try {
+      // Crop and resize the image
+      await sharp("/images/")
+        .resize(480, 480)
+        .toFile("/images/"); // Overwrite the original image
+      console.log(`Cropped and saved: ${"/images/"}`);
+    } catch (error) {
+      console.error(`Error cropping ${filename}: ${error}`);
+    }
+  }
+});
+
+      //  console.log("image:+"+ image[0].filename);
+      //  const cropImgs= [
+      //   image[0].filename,
+      //   image[1].filename,
+      //   image[2].filename
+      //  ]
+      //  console.log(cropImgs);
+
+       // image cropping
+      // for (let i = 0; i < cropImgs.length; i++) {
+      //   await sharp("/images/" + cropImgs[i])
+      //     .resize(480, 480)
+      //     .toFile("/crop/" + cropImgs[i]);
+      // }
+
       const {productname,category,brand,actualPrice,sellingPrice,stock,description} =req.body;
       // console.log("results  " + productname,category,brand,actualrice,stock,description);
+
+    
         //saving data
         const newProduct = new Product({
           image,
@@ -132,65 +178,34 @@ exports.editProduct = async (req,res)=>{
   try {
     const id = req.body.id;
     console.log("id for edit product "+id);
-    const {productname,category,brand,actualPrice,sellingPrice,stock,description}=req.body;
+    const {productname,categoryname,brandname,actualprice,sellingprice,stocks,Description}=req.body;
     const image = req.files
-   console.log(image,productname,category,brand,stock,description);
-   console.log(description);
-   const updateData = {
-  $push: { images: { $each: image } },
-  $set: {
-    productname: productname,
-    category: category, // You can use the actual ID here
-    brand: brand,
-    actualPrice: actualPrice,
-    sellingPrice: sellingPrice,
-    stock: stock,
-    description: description,
-  },
-};
+    console.log(image,productname,categoryname,brandname,actualprice,sellingprice,stocks,Description);
+   console.log(Description);
+
+  const updateData = {
+    $set: {
+      productname: productname,
+      category: categoryname, // You can use the actual ID here
+      brand: brandname,
+      actualPrice: actualprice,
+      sellingPrice: sellingprice,
+      stock: stocks,
+      description: Description,
+    },
+    $push: {
+      image : { $each: image }
+    }
+  };
 const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
-console.log("updated successfully "+updatedProduct);
+// console.log("updated successfully "+updatedProduct);
         res.redirect('/admin/product')
 
 
-    // const editdata = await Product.findOne({_id:id})
-    // console.log(editdata);
-    //   if(editdata){
-    //     editdata.productname=productname
-    //     await editdata.save()
-    //     // await Product.findByIdAndUpdate({_id:id},{$push:{images:{$each:image}}},{$set:{productname,category,brand,actualPrice,sellingPrice,stock,description}});
-    //     // console.log("updated successfully "+editdata);
-    //     res.redirect('/admin/product')
-    //   }else{
-    //     console.log("not updated")
-    //   }
   } catch (error) {
     console.log(error);
   }
 }
-// exports.editProduct = async (req,res)=>{
-//     try {
-//       const id = req.body.id;
-//       console.log("id for edit product "+id);
-//       const {productname,category,brand,actualPrice,sellingPrice,stock,description}=req.body;
-//       const image = req.files
-//      console.log(image,productname,category,brand,stock,description);
-//      console.log(description);
-//       const editdata = await Product.findOne({_id:id})
-//       console.log(editdata);
-//         if(editdata){
-//           editdata.productname=productname
-//           await editdata.save()
-//           // await Product.findByIdAndUpdate({_id:id},{$push:{images:{$each:image}}},{$set:{productname,category,brand,actualPrice,sellingPrice,stock,description}});
-//           // console.log("updated successfully "+editdata);
-//           res.redirect('/admin/product')
-//         }else{
-//           console.log("not updated")
-//         }
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
 
 
   //delete image
@@ -224,6 +239,7 @@ exports.listProduct =async (req,res,next)=>{
         await Product.updateOne({_id:id},{$set:{isListed:true}})
       }
       console.log("Product list changed");
+      res.redirect('/admin/product')
     } catch (error) {
       console.log(error);
       next(error)

@@ -9,6 +9,16 @@ exports.loadWishList = async (req,res)=>{
     try {
         const user = req.session.userId;
     
+     
+    //getting cart product count - badge
+    let cartCount = 0
+    if (user) {
+      const cart = await Cart.findOne({ user });
+      // Assuming you want to calculate cartCount based on the user's cart items
+      if (cart) {
+        cartCount = cart.product.length;
+      }
+    }
         const id = req.query.id;
         let productFound
         if(user){
@@ -18,7 +28,7 @@ exports.loadWishList = async (req,res)=>{
     
         const Data = await Wishlist.findOne({user}).populate('product.product_id')
         // console.log(Data.product[0].product_id);
-        res.render('wishlist',{Data,productFound})
+        res.render('wishlist',{Data,productFound,cartCount})
     } catch (error) {
         console.log(error);
     }

@@ -1,7 +1,7 @@
-const User = require('../model/addressModel')
+const User = require('../model/userModel')
 const Cart = require('../model/cartModel')
 const Address = require('../model/addressModel')
-
+const Coupon = require('../model/couponModel')
 const session = require('express-session')
 
 
@@ -14,15 +14,33 @@ exports.shippingAddress = async (req,res,next)=>{
 
         const user = req.session.userId;
         //console.log(user);
+
+
+        //getting cart product count - badge
+        let cartCount = 0
+        if (user) {
+          const cart = await Cart.findOne({ user });
+          // Assuming you want to calculate cartCount based on the user's cart items
+          if (cart) {
+            cartCount = cart.product.length;
+          }
+        }
         const cartData = await Cart.findOne({user}).populate('product.product_id')
         const addressData = await Address.findOne({user})
         // console.log(addressData);
         // console.log(cartData);
-        const total  = cartData?.product.reduce((acc,item)=>{
+        let subTotal = cartData?.product.reduce((acc,item)=>{
             const totalItem = item.price * item.count;
             return acc + totalItem
         },0)
-        res.render('shippingAddress',{addressData,total})
+
+       
+        // const couponFound = await Coupon.findOne({couponName:cartData?.isCouponApplied})
+        // if(couponFound){
+        //     total =subTotal- couponFound.maximumDiscount
+        // }
+    
+        res.render('shippingAddress',{addressData,subTotal,cartCount})
             
     } catch (error) {
         console.log(error);
@@ -33,7 +51,19 @@ exports.shippingAddress = async (req,res,next)=>{
 //add address in cart side
 exports.addAddressCart = async (req,res,next)=>{
     try {
-        res.render('addAddress')
+        const user = req.session.userId;
+    
+     
+        //getting cart product count - badge
+        let cartCount = 0
+        if (user) {
+          const cart = await Cart.findOne({ user });
+          // Assuming you want to calculate cartCount based on the user's cart items
+          if (cart) {
+            cartCount = cart.product.length;
+          }
+        }
+        res.render('addAddress',cartCount)
     } catch (error) {
         console.log(error);
         next(error)
@@ -155,25 +185,6 @@ exports.addressSelector = async (req,res)=>{
 }
 
 
-//loading check out
-exports.loadCheckOut = async (req,res,next)=>{
-    try {
-        const user = req.session.userId
-        const cartData = await Cart.findOne({user}).populate('product.product_id')
-        const addressData = await Address.findOne({user})
-        const total  = cartData?.product.reduce((acc,item)=>{
-            const totalItem = item.price * item.count;
-            return acc + totalItem
-        },0)
-    
-      res.render('checkout',{addressData,total})
-    } catch (error) {
-        console.log(error);
-        next(error)
-    }
-
-}
-
 //payment
 exports.payment = async (req,res)=>{
     try {
@@ -196,7 +207,20 @@ exports.addressload = async (req,res,next)=>{
       const address = req.session.addresId
       const addressData = await Address.findOne({user})
     //   console.log(addressData);
-      res.render('addresspage',{addressData})
+
+
+ 
+     
+    //getting cart product count - badge
+    let cartCount = 0
+    if (user) {
+      const cart = await Cart.findOne({ user });
+      // Assuming you want to calculate cartCount based on the user's cart items
+      if (cart) {
+        cartCount = cart.product.length;
+      }
+    }
+      res.render('addresspage',{addressData,cartCount})
     } catch (error) {
       console.log(error);
       next(error)

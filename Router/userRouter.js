@@ -9,6 +9,8 @@ const addressController = require('../Controller/addressController')
 const wishlistController = require('../Controller/wishlistController')
 const orderController = require('../Controller/orderController')
 const userAuth = require('../middlewares/userAuth')
+const couponController = require('../Controller/couponController')
+const bannerController = require('../Controller/bannerController')
 
 
 // const session = require(express-session)
@@ -20,6 +22,22 @@ userRoute.set('views','./views/user')
 //login
 userRoute.get('/login',nocache(),userAuth.isLogout,userController.loadLogin)
 userRoute.post('/login',userController.Login)
+
+//forgot password -GET
+userRoute.get('/forgotPasswordpage',userController.loadforgotpassword)
+//forgot password - POST
+userRoute.post('/forgotPassword',userController.forgotPassword)
+//forgotPassword otp
+userRoute.get('/forgotPasswordOtp',userController.forgotPasswordOtpPage)
+//forgot assword otp
+userRoute.post('/forgotPasswordOtp',userController.forgotPasswordOtp)
+//forgotPassword reset opage= get
+userRoute.get('/resetPassword',userController.resetPasswordPage)
+//forgot password reset password -post
+userRoute.get('/resetPassword',userController.resetPassword)
+
+
+
 
 
 //register
@@ -73,6 +91,8 @@ userRoute.post('/changeCount',cartController.changeCount)
 //delete items from cart
 userRoute.get('/cartDelete',cartController.cartDelete)
 
+//coupon apply
+userRoute.post('/getCoupon',userAuth.isLogin,couponController.getCoupon)
 
 
 //shippingaddress in cart side
@@ -105,7 +125,10 @@ userRoute.post('/editAddress',addressController.editAddress)
 userRoute.get('/deleteAddress',userAuth.isLogin,addressController.deleteAddress)
 
 //checkout page
-userRoute.get('/checkout',userAuth.isLogin,addressController.loadCheckOut)
+userRoute.get('/checkout',userAuth.isLogin,orderController.loadCheckOut)
+
+//WALLET APPLIED
+userRoute.post('/apply_wallet',orderController.applyWallet)
 
 
 //selecting address
@@ -140,7 +163,9 @@ userRoute.get('/Profile',userAuth.isLogin,userController.loadUserProfile)
 
 //user edit profile
 userRoute.get('/editProfile',userAuth.isLogin,userController.LoadUserEditProfile)
-userRoute.post('/editProfile',userController.editProfile)
+userRoute.post('/changeProfile',userController.editProfile)
+
+
 
 //change password
 userRoute.post('/changePassword',userController.changePassword)

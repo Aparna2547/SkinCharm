@@ -1,12 +1,12 @@
-$("#checkoutForm").submit((e) => {
+$(".checkoutForm").submit((e) => {
   e.preventDefault();
   $.ajax({
     url: "/checkOut",
     method: "post",
-    data: $("#checkoutForm").serialize(),
+    data: $(".checkoutForm").serialize(),
     success: function (res) {
         // console.log(res)
-        if(res.status == 'CASH'){
+        if(res.status == 'CASH' || res.status == 'WALLET'){
             location.href = '/orderSuccess'
         }else if(res.status == 'ONLINE'){
             razorpayPayment(res.order,res.cart)

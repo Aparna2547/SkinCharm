@@ -20,7 +20,7 @@
 <% }else{ %>
    
     <!-- Shopping Cart Section Begin -->
-    <section class="shopping-cart spad">
+    <section class="shopping-cart spad mt-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
@@ -112,18 +112,34 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <div class="cart__discount">
-                        <h6>Discount codes</h6>
-                        <form action="#">
-                            <input type="text" placeholder="Coupon code">
-                            <button type="submit" style="background-color: #E80071;">Apply</button>
+                    <h5 class="fw-bold">Coupon</h5>
+                    <div class="cart__discount d-flex">
+                        
+                            <form action="/getCoupon" method="post" class="w-100">
+                            <input type="text" placeholder="Coupon code" name="coupon" class="form-control w-75">
+                            <button type="submit" style="background-color: #E80071;" class="form-control w-25 text-white ">Apply</button>
                         </form>
                     </div>
-                    <div class="cart__total">
-                        <h6>Cart total</h6>
+                    
+                    <div class="border border-1 p-1" style="overflow: auto;max-height: 300px;">
+                        <% if(couponFound){ %>
+                       <% coupons.forEach((coupon)=>{ %> 
+                        <div class="border border-2 p-2 mt-1">
+                            <p class="fw-bold"><%=coupon.couponName%></p>
+                            <p>save ₹<%= coupon.maximumDiscount %> on minimum purchase ₹<%= coupon.minimumPurchase %></p>
+                     
+                            <p>Expires on  <% const expiryDate = new Date(coupon.expiryDate); %>
+                                <% const options = { month: 'short', day: 'numeric', year: 'numeric' }; %>
+                                <%= expiryDate.toLocaleDateString('en-US', options) %> </p>
+                        </div>
+                        <% }) }%>
+                    </div>
+                    <div class="cart__total mb-2">
+                        <h6 class="text-center  mb-2">Cart total</h6>
                         <ul>
-                            <!-- <li>Subtotal <span>$ 169.50</span></li> -->
-                            <li class="fw-bold">Total <span id="total">₹ <%=total%></span></li>
+                            <li  class="fw-bold">Subtotal <span id="subTotal"><%=subTotal %></span></li>
+                            <hr>
+                            <li></li>
                         </ul>
                         <a href="/shippingAddress" class="primary-btn text-decoration-none text-white" style="background-color: #E80071;">Proceed to checkout</a>
                     </div>

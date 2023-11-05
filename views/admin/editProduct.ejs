@@ -1,6 +1,6 @@
 <%- include("../admin/header.ejs") %>
 
-   
+
 	<!-- SIDEBAR -->
 	<section id="sidebar">
 		<!-- <a href="#" class="brand"> -->
@@ -8,46 +8,55 @@
 
 		</a>
 		<ul class="side-menu top">
-            <li>
+            <li >
                 <a href="/admin/home" class="text-decoration-none">
-            <!-- <i class='bx bxs-dashboard me-0'></i> --><i class="fa fa-dashboard ms-1"></i>&nbsp;
-            <span class="text">Dashboard</span>
+            <!-- <i class='bx bxs-dashboard me-0'></i><i class="fa fa-dashboard ms-1"></i>&nbsp; -->
+			<i class="fas fa-chart-line" style="font-size: 24px"></i>
+
+            <span class="text mx-2 fw-bold">Dashboard</span>
                 </a>
             </li>
             <li>
                 <a href="/admin/user" class="text-decoration-none">
-                    <img src="/admin/assets/usericon.png" alt="user" style="width:1rem;">&nbsp;&nbsp;
-                    <span class="text">Users</span>
+                    <!-- <img src="/admin/assets/usericon.png" alt="user" style="width:1rem;">&nbsp;&nbsp; -->
+					<i class="fas fa-users" style="font-size: 24px"></i>
+
+                    <span class="text mx-2 fw-bold">Users</span>
                 </a>
             </li>
             <li>
                 <a href="/admin/category" class="text-decoration-none">
+					<!-- <i class="fas fa-th-list" style="font-size: 24px"></i> -->
+
                     <img src="/admin/assets/category.png" alt="user" style="width:1rem;">&nbsp;&nbsp;
-                    <span class="text">Categories</span>
+                    <span class="text  mx-2 fw-bold">Categories</span>
                 </a>
             </li>
             <li  class="active">
                 <a href="/admin/product" class="text-decoration-none">
-                    <img src="/admin/assets/producticon.png" alt="product" style="width:1.3rem;">&nbsp;&nbsp;
-                    <span class="text">Product</span>
+                    <!-- <img src="/admin/assets/producticon.png" alt="product" style="width:1.3rem;">&nbsp;&nbsp; -->
+
+					<i class="fas fa-cubes " style="font-size: 24px"></i>
+					<span class="text  mx-2 fw-bold">Product</span>
                 </a>
             </li>
 			<li>
 				<a href="/admin/orders" class="text-decoration-none">
-					<i class='bx bxs-message-dots' ></i>
-					<span class="text">Order</span>
+					<i class="fa fa-truck fw-bold" aria-hidden="true"></i>
+
+					<span class="text mx-2 fw-bold">Order</span>
 				</a>
 			</li>
 			<li>
-				<a href="#" class="text-decoration-none">
-					<i class='bx bxs-group' ></i>
-					<span class="text">Coupons</span>
+				<a href="/admin/coupons" class="text-decoration-none">
+					<i class='fas fa-tag' style='font-size:24px'></i>
+					<span class="text mx-2 fw-bold">Coupons</span>
 				</a>
 			</li>
 			<li>
-				<a href="#">
-					<i class='bx bxs-group' ></i>
-					<span class="text">Check out</span>
+				<a href="/admin/banner">
+					<i class="fas fa-image" style="font-size: 24px"></i>
+					<span class="text  mx-2 fw-bold">Banner</span>
 				</a>
 			</li>
 		</ul>
@@ -102,7 +111,7 @@
                                         <%= message %>
                                     </h2>
                                     <% } %>
-                                        <form action="/admin/editProduct" method="post" id="formId"
+                                        <form action="/admin/editProduct" method="post" id="editformId"
                                             enctype="multipart/form-data">
 
                                         <!-- id input -->
@@ -114,7 +123,7 @@
                                             <!-- product input -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="form3Example3">Product</label>
-                                                <input type="text" id="product" name="productname" value="<%=prdt.productname%>"
+                                                <input type="text" id="productname" name="productname" value="<%=prdt.productname%>"
                                                     class="form-control" />
                                             </div>
 
@@ -123,7 +132,7 @@
 
                                                 <label class="form-label" for="form3Example3">Category</label>
                                                 <!-- <input type="text" id="category" name="category" class="form-control" /> -->
-                                                <select class="form-control" name="category" id="category">
+                                                <select class="form-control" name="categoryname" id="categoryname">
                                                     <option value="selected" selected>select a category</option>
                                                     <% category.forEach(cat=>{ %>
                                                         <option value="<%=cat._id%>"  <%=pdtCat==cat.category && 'selected'%> >
@@ -136,7 +145,7 @@
                                             <!-- brand input -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="form3Example3">Brand name</label>
-                                                <select class="form-control" name="brand" id="brand">
+                                                <select class="form-control" name="brandname" id="brandname">
                                                     <option value="selected" selected>select a brand</option>
                                                     <% category[0].brands.forEach(brand=>{ %>
                                                         <option value="<%=brand%>" <%= pdtBrand == brand && 'selected'%>>
@@ -149,28 +158,28 @@
                                             <!-- actual price input -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="form3Example3">Actual Price</label>
-                                                <input type="text" id="actualPrice" name="actualPrice" value="<%=prdt.actualPrice%>"
+                                                <input type="number" id="actualprice" name="actualprice" value="<%=prdt.actualPrice%>"
                                                     class="form-control" />
                                             </div>
 
                                             <!-- selling price input -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="form3Example3">Selling Price</label>
-                                                <input type="text" id="sellingPrice" name="sellingPrice" value="<%=prdt.sellingPrice%>"
+                                                <input type="number" id="sellingprice" name="sellingprice" value="<%=prdt.sellingPrice%>"
                                                     class="form-control" />
                                             </div>
 
                                             <!-- Stick input -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="form3Example3">Stock</label>
-                                                <input type="text" id="stock" name="stock" class="form-control" value="<%=prdt.stock%>" />
+                                                <input type="number" id="stocks" name="stocks" class="form-control" value="<%=prdt.stock%>" />
                                             </div>
 
                                             <!-- description input -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="form3Example3">description</label>
-                                                <textarea name="description" id="description" value="<%=prdt.description%>" cols="10" rows="5"
-                                                    class="form-control"></textarea>
+                                                <textarea name="Description" id="Description" cols="10" rows="5"
+                                                    class="form-control">   "<%=prdt.description%>" </textarea>
 
                                             </div>
 
@@ -182,19 +191,21 @@
                                                 if(prdt.image[i]){%>
                                                 <div style="width:6rem" class="m-2">
                                                     <img src="/images/<%=prdt.image[i].filename%>" alt="" class="img-fluid">
-                                                    <a class="btn btn-danger btn-sm my-2 w-100" href="/admin/deleteImg?filename=<%=prdt.image[i].filename%>&id=<%=prdt._id%>">Delete</a>
+                                                    <% if(prdt.image.length > 1 ){%>
+                                                        <a class="btn btn-danger btn-sm my-2 w-100" href="/admin/deleteImg?filename=<%=prdt.image[i].filename%>&id=<%=prdt._id%>">Delete</a>
+                                                    <%}%>
                                                 </div>
                                             <%}else{%>  
                                                 <input style="width: 10rem;" type="file" name="image" id="image" class="form-control" />
                                             <% }}%>    
                                             </div>
                                             </div>
-                                                                        <div id="errorMessage" class="text-center text-danger m-1 fw-bold">
+                                         <div id="errorMessage" class="text-center text-danger m-1 fw-bold">
                                             </div>
 
                                             <!-- Submit button -->
-                                            <button type="submit" class="btn btn-primary btn-block mb-4 w-100">
-                                  Edit
+                                            <button type="submit" class="btn btn-primary btn-block mb-4 w-100 fw-bold">
+                                  UPDATE CHANGES
                               </button>
 
 
@@ -207,5 +218,7 @@
         </section>
         <!-- Section: Design Block -->
 
-<script src="/admin/js/editProduct.js"></script>
+
+        <script src="/admin/js/editProductValidation.js"></script>
+
     <%- include("../admin/footerpage.ejs") %>

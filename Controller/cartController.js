@@ -6,7 +6,7 @@ const Cart =  require('../model/cartModel');
 const Wishlist = require('../model/wishlistModel')
 const { singleProduct } = require("./usercontroller");
 const e = require("express");
-
+const Coupon = require('../model/couponModel')
 
 exports.loadCart = async (req,res,next)=>{
     try {
@@ -14,16 +14,39 @@ exports.loadCart = async (req,res,next)=>{
         var context = req.app.locals.specialContext
         req.app.locals.specialContext = ""
         //we need an user to logged in to go cart
+
+        const coupons = await Coupon.find({})
+        console.log(coupons)
+       
         const user = req.session.userId
         const cartData = await Cart.findOne({user}).populate('product.product_id')
         // console.log(cartData);
-        const total = cartData?.product.reduce((acc,item)=>{
+        let subTotal = cartData?.product.reduce((acc,item)=>{
             const totalItem = item.price * item.count;
             return acc + totalItem
         },0)
-     //   console.log("total in rendering vcart" + total);
-        // console.log(cartData.product[0].product_id);
-        res.render('cart',{cartData,total,context})
+
+        
+  
+    //getting cart product count
+    let cartCount = 0
+    if (user) {
+      const cart = await Cart.findOne({ user });
+      // Assuming you want to calculate cartCount based on the user's cart items
+      if (cart) {
+        cartCount = cart.product.length;
+      }
+    }
+       
+        const couponFound = await Coupon.findOne({couponName:cartData?.isCouponApplied})
+        let total
+        if(couponFound){
+            total =subTotal- couponFound.maximumDiscount
+        }else{
+            total = subTotal
+        }
+    
+        res.render('cart',{cartData,total,context,coupons,couponFound,subTotal,cartCount})
        console.log("rendering cartpage");
     } catch (error) {
         console.log(error);

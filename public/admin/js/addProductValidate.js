@@ -37,23 +37,28 @@ formId.addEventListener("submit", (event) => {
     event.preventDefault()
     errorMessage.textContent = "Select the brand"
   }
-  else if (actualprice < 0 && typeof(actualprice)!=Number && actualprice == "") {
+  else if (actualprice <= 10 ) {
     event.preventDefault();
     errorMessage.textContent = "Enter valid price";
   }
-  else if (sellingPrice < 0 && typeof(sellingPrice)!=Number && sellingPrice == "") {
+  else if (sellingPrice <= 10) {
     event.preventDefault();
     errorMessage.textContent = "Enter valid price";
   }
-  else if (stock <= 0 && typeof(stock)!=Number && stock =="") {
+  else if(sellingPrice>actualprice){
+    event.preventDefault();
+    errorMessage.textContent = "Selling price cannot be greater than actual price"
+  }
+  else if (stock <= 0) {
+    console.log(stock);
     event.preventDefault();
     errorMessage.textContent = "Stock cannot be zero or negative number";
   }
-  else if (description.length == 0) {
+  else if (description.length < 8) {
     event.preventDefault();
     errorMessage.textContent = "Enter the description";
   }
-  else if (image1.files.length === 0 && image2.files.length === 0 && image3.files.length === 0) {
+  else if (image1.files.length === 0 && image2.files.length ===0 && image3.files.length==0 ) {
     event.preventDefault(); // Prevent form submission
     errorMessage.textContent = "Choose an image";
   }

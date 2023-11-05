@@ -23,26 +23,44 @@
                                         <button type="submit" class="btn w-100 fw-bold text-white ls mt-3" style="background-color:#c70261;">PLACE ORDER</button>
                                     </form> -->
                                     
-                                     <form  id="checkoutForm">
-                                        <input type="radio" data-pay-type="cash" id="cod"  <%=  'checked'  %> name="payment" value="cash">
+                                     <form  class="checkoutForm">
+                                        <input type="radio" data-pay-type="cash" id="cod" <%=!walletApplied && 'checked'%> <%=walletApplied && 'disabled' %> name="payment" value="cash">
                                         <label for="cod" class="fw-bold">Cash on Delivery</label><br>
-                                        <input type="radio" data-pay-type="online" id="onp" name="payment" value="online">
+                                        <input type="radio" data-pay-type="online" id="onp" name="payment" value="online" <%=walletApplied && 'disabled' %>>
                                         <label for="onp"  class="fw-bold">Online payment</label><br>
+                                        <% if(subTotal !==0){ %>
                                         <button type="submit" class="btn w-100 fw-bold text-white ls mt-3" style="background-color:#c70261;">PLACE ORDER</button>
-                                        
+                                        <% } %>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 me-0 border shadow">
-
-                            <div class="cart__total bg-white">
-                                <h6>Cart total</h6>
+                        <div class="col-lg-4 me-0 p-3 border shadow">
+                            <div class="border d-flex justify-content-between align-items-center border-1 p-3 mb-2 text-center">
+                                <% if(walletApplied == false){%>
+                                    <h5>Wallet balance : <b>₹<%= walletAmount %></b></h5>
+                                <%}else{%>
+                                    <div>
+                                        <h6>Wallet balance <b>₹<%= walletAmount %></b></h6>
+                                    </div>
+                                <% } %> 
+                                <% if(subTotal < walletAmount){ %>
+                                <button class="btn btn-sm px-2 btn-secondary fw-bold" data-wallet-amount="<%= walletAmount %>" data-to-do="<%= walletApplied ? 'REMOVE':'USE' %>" id="use-wallet"><%= walletApplied ? 'REMOVE':'USE'%></button>
+                                <% } %>
+                            </div>
+                            <div class="cart__total mb-2">
+                                <h6 class="text-center  mb-2">Cart total</h6>
                                 <ul>
-                                    <!-- <li>Subtotal <span>$ 169.50</span></li> -->
-                                    <li class="fw-bold">Total <span id="total">₹ <%= total %></span></li>
+                                    <li  class="fw-bold">Subtotal <span id="subTotal"><%=subTotal %></span></li>
+                                    <hr>
+                                    <li></li>
                                 </ul>
-                                
+                                <% if(subTotal == 0){ %>
+                                    <form  class="checkoutForm">
+                                        <input type="text" data-pay-type="wallet" value="wallet" name="payment"  hidden>
+                                        <button type="submit" class="btn w-100 fw-bold text-white ls mt-3" style="background-color:#c70261;">PAY WITH WALLET</button>
+                                    </form>
+                                <% } %>
                             </div>
                         </div>
                     </div>
@@ -50,8 +68,8 @@
             </section>
 
               
-        
-            
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="/user/js/wallet.js"></script>
             <!-- Shopping Cart Section End -->
             <%- include('./footer.ejs') %>
 

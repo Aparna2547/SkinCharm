@@ -7,6 +7,7 @@ const Category = require("../model/categoryModel");
 const Product = require("../model/productModel");
 const Wishlist = require("../model/wishlistModel");
 const Order = require("../model/orderModel");
+const Banner =require('../model/bannerModel')
 const mongoose = require("mongoose");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
@@ -23,7 +24,18 @@ exports.loadLogin = async (req, res) => {
     var context = req.app.locals.specialContext;
     req.app.locals.specialContext = null;
 
-    res.render("login", { context });
+    const user = req.session.userId;
+     //getting cart product count
+     let cartCount = 0
+     if (user) {
+       const cart = await Cart.findOne({ user });
+       // Assuming you want to calculate cartCount based on the user's cart items
+       if (cart) {
+         cartCount = cart.product.length;
+       }
+     }
+
+    res.render("login", { context,cartCount});
   } catch (error) {
     console.log(error);
   }
@@ -68,11 +80,138 @@ exports.Login = async (req, res) => {
 //rendering signup page
 exports.LoadRegister = async (req, res) => {
   try {
-    res.render("signup");
+    const user = req.session.userId;
+     //getting cart product count
+     let cartCount = 0
+     if (user) {
+       const cart = await Cart.findOne({ user });
+       // Assuming you want to calculate cartCount based on the user's cart items
+       if (cart) {
+         cartCount = cart.product.length;
+       }
+     }
+    res.render("signup",{cartCount});
   } catch (error) {
     console.log(error);
   }
 };
+
+
+
+//rendering forgotpassword
+exports.loadforgotpassword = async (req,res)=>{
+  try {
+    res.render("forgotPassword");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+//forgit password
+
+exports.forgotPassword  = async (req,res)=>{
+  try {
+    let mobile = req.body.mobile
+    console.log(mobile);
+    req.session.mobile= mobile;
+    const user = await User.findOne({mobile:mobile})
+    console.log(user);
+    if(user){
+    //   client.verify.v2.services(serviceId).verifications.create({
+    //     to: `+91${mobile}`,
+    //     channel: "sms",
+    //   });
+    // }
+    // req.session.otpPageForSignUp = true;
+    res.redirect("/forgotPasswordOtp");
+    // console.log(req.session.otpPageForSignUp);
+    // res.redirect(`/forgotPasswordOtp?mobile=${mobile}`);
+  }
+ } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
+//remdering forgotPasswordOtpPage
+exports.forgotPasswordOtpPage = async(req,res)=>{
+  try {
+   // if (req.session.otpPageForSignUp == true) {
+    
+      res.render('forgotPasswordOtp')
+    // } else {
+    //   res.redirect("/register");
+    // }
+   
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//rensering reset password
+
+exports.resetPasswordPage = async (req,res)=>{
+  try {
+    
+    res.render('resetpassword')
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+//frgotpassword otp
+exports.forgotPasswordOtp = async (req,res)=>{
+  try {
+   
+    const mobile = req.session.mobile
+    const {otp} = req.body
+    // const ver_check = await client.verify.v2
+    //Checking the otp is correct
+    //.services(serviceId)
+    // .verificationChecks.create({ to: `+91${mobile}`, code: otp });
+    // if (ver_check.status === "approved") {
+    //     req.session.passwordReset = true
+    //     res.redirect('/resetpassword')
+    // }
+    // else{
+    //     req.app.locals.specialContext = 'Invaid otp. Please enter the correct otp';
+    //     res.redirect(`/otp_reset_password?mobile=${mobile}`);
+    // }
+    res.redirect('/resetpassword')
+    // }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//reset password
+exports.resetPassword = async (req,res)=>{
+  try {
+    const mobile = req.session.mobile;
+    const {password,c_password}=req.body;
+    console.log(password,c_password);
+    if(password !==c_password){
+      res.json({message:"passwords are not matching"})
+    }else{
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await User.updateOne({mobile},{
+        $set:{
+          password:hashedPassword
+        }
+      })
+     
+      console.log("data got it");
+     res.redirect('/login')
+    }
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
 //Signup page
 let details;
@@ -150,22 +289,77 @@ exports.verifyOtp = async (req, res) => {
   }
 };
 
-//rendering home page
+// //rendering home page
+// exports.LoadHome = async (req, res, next) => {
+//   try {
+//     const category = await Category.find({ isListed: true });
+//     const banner = await Banner.findOne({})
+//     const product = await Product.find({}).sort({addedDate:-1}).limit(9)
+                                                      
+//     const user = req.session.userId;
+//     console.log(user);
+//     let cartCount = 0;
+//     if (user) {
+//       const cart = await Cart.findOne({ user });
+//       // Assuming you want to calculate cartCount based on the user's cart items
+//       if (cart) {
+//         cartCount = cart.items.length;
+//       }
+//     }                                                                                                                                                                                                                                                                                                                                                           og("product 10",product);
+
+//     res.render("index", { category,banner,product});
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//   }
+// };
+
+
 exports.LoadHome = async (req, res, next) => {
   try {
     const category = await Category.find({ isListed: true });
-    res.render("index", { category });
+    const banner = await Banner.findOne({});
+    const product = await Product.find({}).sort({ addedDate: -1 }).limit(9);
+
+    const user = req.session.userId;
+    console.log(user);
+
+    //getting cart product count
+    let cartCount = 0;
+    if (user) {
+      const cart = await Cart.findOne({ user });
+      // Assuming you want to calculate cartCount based on the user's cart items
+      if (cart) {
+        cartCount = cart.product.length;
+      }
+    }
+
+
+    res.render("index", { category, banner, product, cartCount });
   } catch (error) {
     console.log(error);
     next(error);
   }
 };
 
+
 //shop page rendering
 exports.LoadShopPage = async (req, res, next) => {
   try {
     const user = req.session.userId;
 
+
+    
+   
+     //getting cart product count
+     let cartCount = 0
+     if (user) {
+       const cart = await Cart.findOne({ user });
+       // Assuming you want to calculate cartCount based on the user's cart items
+       if (cart) {
+         cartCount = cart.product.length;
+       }
+     }
     
     //get users wishlist
     const wishlist = await Wishlist.findOne({ user });
@@ -268,7 +462,8 @@ if (user) {
       page,
       limit,
       totalPages: Math.ceil(productsCount/limit),
-      productIdsAsString
+      productIdsAsString,
+      cartCount
     });
   } catch (error) {
     console.log(error);
@@ -280,6 +475,17 @@ if (user) {
 exports.singleProduct = async (req, res, next) => {
   try {
     const user = req.session.userId;
+    
+  
+     //getting cart product count
+     let cartCount = 0
+     if (user) {
+       const cart = await Cart.findOne({ user });
+       // Assuming you want to calculate cartCount based on the user's cart items
+       if (cart) {
+         cartCount = cart.product.length;
+       }
+     }
     const id = req.query.id;
     let productFound, wishlistFound;
     if (user) {
@@ -304,6 +510,7 @@ exports.singleProduct = async (req, res, next) => {
         singleProduct,
         productFound,
         wishlistFound,
+        cartCount
       });
     }
   } catch (error) {
@@ -320,7 +527,17 @@ exports.loadUserProfile = async (req, res, next) => {
     const user = await User.findOne({ mobile });
     // req.session.userId = user._id
     console.log(user);
-    res.render("userProfile", { user });
+
+     //getting cart product count
+     let cartCount = 0
+     if (user) {
+       const cart = await Cart.findOne({ user });
+       // Assuming you want to calculate cartCount based on the user's cart items
+       if (cart) {
+         cartCount = cart.product.length;
+       }
+     }
+    res.render("userProfile", { user,cartCount  });
     console.log("rendering userprofile.....");
   } catch (error) {
     console.log(error);
@@ -339,11 +556,22 @@ exports.profile = async (req, res) => {
 //load edit profile - GET
 exports.LoadUserEditProfile = async (req, res, next) => {
   try {
+    
+    const user = req.session.userId;
+     //getting cart product count
+     let cartCount = 0
+     if (user) {
+       const cart = await Cart.findOne({ user });
+       // Assuming you want to calculate cartCount based on the user's cart items
+       if (cart) {
+         cartCount = cart.product.length;
+       }
+     }
     const id = req.query._id;
-    // console.log(id);
+    console.log(id);
     const editData = await User.findOne({ _id: id });
     // console.log(editData);
-    res.render("editProfile", { data: editData });
+    res.render("editProfile", { data: editData ,cartCount });
   } catch (error) {
     console.log(error);
     next(error);
@@ -353,10 +581,11 @@ exports.LoadUserEditProfile = async (req, res, next) => {
 //edit profile -POST
 exports.editProfile = async (req, res) => {
   try {
+    console.log('hey');
     const id = req.body.id;
     console.log("id of the id"+id)
-    const {name,mobile} = req.body;
-    console.log(name,mobile);
+    const {name,mobile,email} = req.body;
+    console.log(name,mobile,email);
 
     const data = await User.findOne({_id:id})
     console.log("data",data);
@@ -368,7 +597,8 @@ exports.editProfile = async (req, res) => {
         {
           $set:{
             username:name,
-            mobile:mobile
+            mobile:mobile,
+            email:email
           }});
           res.redirect('/Profile')
       console.log("data changed");
@@ -382,6 +612,9 @@ exports.editProfile = async (req, res) => {
 // change password
 exports.changePassword = async (req, res) => {
   try {
+    var context = req.app.locals.specialContext;
+    req.app.locals.specialContext = null;
+    
     console.log("hai this is changepassword page");
     const user = req.session.userId;
     console.log(user);
@@ -390,35 +623,58 @@ exports.changePassword = async (req, res) => {
 
     const currentPassword = req.body.currentpassword;
     console.log("currentPassword", currentPassword);
-    const hashedPassword = userFound.password;
-    console.log(hashedPassword);
-    const password = await bcrypt.compare(currentPassword, hashedPassword);
+  
     const newPassword = req.body.newpassword;
+    const confirmPassword = req.body.confirmpassword;
     console.log(newPassword);
-
-    if (password) {
-      console.log("matched");
     
-      if (newPassword) {
-        const newHashedPassword = await bcrypt.hash(newPassword, 10);
-        
-        // Use the user's _id as the filter criteria
-        await User.updateOne({ _id: user }, {
-          $set: {
-            password: newHashedPassword
-          }
-        });
-
-        console.log('password changed');
-        res.redirect('/Profile')
-      } else {
-        console.log("New password is empty or undefined.");
-      }
-    } else {
-      console.log("not matched");
+    if(currentPassword !== confirmPassword){
+      req.app.locals.specialContext = "The passwprd are not same"
     }
+
+    const hashedPassword = userFound.password;
+    // console.log(hashedPassword);
+   const password = await bcrypt.compare(currentPassword, hashedPassword);
+if(password){
+  const newHashedPassword = await bcrypt.hash(newPassword, 10);
+        
+      // Use the user's _id as the filter criteria
+      await User.updateOne({ _id: user }, {
+        $set: {
+          password: newHashedPassword
+        }
+      });
+
+      console.log('password changed');
+      res.redirect('/Profile')
+}
+    // if(currentPassword =='' || newPassword=='' ||confirmPassword ==''){
+    //   return res.json({status:'empty'})
+    // }else if(newPassword !== confirmPassword){
+    //   return res.json({status:'different'})
+    // }
+    // const hashedPassword = userFound.password;
+    // console.log(hashedPassword);
+    // const password = await bcrypt.compare(currentPassword, hashedPassword);
+    // if (!password) {
+    //   return res.json({status:'not matching'})
+    // }
+    // else{
+    //   const newHashedPassword = await bcrypt.hash(newPassword, 10);
+        
+    //     // Use the user's _id as the filter criteria
+    //     await User.updateOne({ _id: user }, {
+    //       $set: {
+    //         password: newHashedPassword
+    //       }
+    //     });
+
+    //     console.log('password changed');
+    //   return res.json({status:'done'})
+    // }
+     
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 }
 

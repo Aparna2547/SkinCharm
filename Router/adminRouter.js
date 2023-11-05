@@ -10,6 +10,9 @@ const nocache = require('nocache')
 const adminauth = require('../middlewares/adminAuth')
 const productModel = require('../model/productModel')
 const productController = require('../Controller/productController')
+const couponController = require('../Controller/couponController')
+const couponModel = require('../model/couponModel')
+const bannerController = require('../Controller/bannerController')
 
 
 
@@ -90,6 +93,31 @@ adminRoute.get('/changeOrderStatus',adminauth.isadminLogin,orderController.chang
 //view details
 adminRoute.get('/viewDetails',adminauth.isadminLogin,orderController.viewDetails)
 
+
+//COUPONS
+//for coupons
+adminRoute.get('/coupons',adminauth.isadminLogin,couponController.loadCouponPage)
+
+//adding coupon
+adminRoute.post('/addCoupon',adminauth.isadminLogin,couponController.addCoupon)
+
+//editCoupon
+adminRoute.get('/editCoupon',adminauth.isadminLogin,couponController.editCouponLoad)
+//editCoupon - POST
+adminRoute.post('/editCoupon',adminauth.isadminLogin,couponController.editCoupon)
+
+//delete coupon
+adminRoute.get('/deleteCoupon',adminauth.isadminLogin,couponController.deleteCoupon)
+
+
+//BANNeR
+adminRoute.get('/banner',adminauth.isadminLogin,bannerController.viewBanners)
+
+//add banner
+adminRoute.post('/addBanner',adminauth.isadminLogin,multerMid.upload.array('banner'),bannerController.addbanner)
+
+//deleteBaner
+adminRoute.get('/deleteBanner',adminauth.isadminLogin,bannerController.deleteBanner)
 //logout
 adminRoute.get('/adminLogout',adminController.adminLogout)
 // adminRoute.post('/adminLogout',nocache(),adminController.adminLogout)

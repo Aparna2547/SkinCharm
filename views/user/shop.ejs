@@ -58,14 +58,14 @@
                                        
                                         </div>
                                     </div>
-                                    <div class="card">
+                                    <!-- <div class="card">
                                         <div class="card-heading">
                                             <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
                                         </div>
                                         <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
                                            <p>hai</p>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <input type="hidden" value="<%= search %>" name="search" hidden>
                                     <div class="d-flex justify-content-center align-items-center">
                                     <button class="btn text-white ls fw-bold w-100" style="background-color: #c70261;">FILTER</button>
@@ -106,6 +106,10 @@
                                 </ul>
                               </div>
                         </div>
+
+
+
+
                         <div class="row">
                             
                             <% products.forEach((product)=>{ %>
@@ -156,6 +160,8 @@
                                 </div>
                                 <% }) %>
                         </div>
+
+                        
                         <div>
                             <ul class="d-flex justify-content-center align-items-center">
                              <li class="p-2 border border-2" <% if(page<=1){ %>style="pointer-events: none;"<%} %> ><a href="#"  data-page-no=<%=page-1%> class="page-item text-dark fw-bold"><</a></li>
